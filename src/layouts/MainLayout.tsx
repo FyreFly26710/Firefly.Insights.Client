@@ -6,7 +6,7 @@ type MainLayoutProps = {
 export const MainLayout = ({ children }: MainLayoutProps) => {
     return (
         <>
-            #      {children}
+            {children}
         </>
     );
 };
