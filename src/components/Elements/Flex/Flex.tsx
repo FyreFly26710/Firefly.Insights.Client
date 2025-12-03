@@ -13,7 +13,7 @@ export type JustifyContent =
     | "space-evenly";
 export type AlignItems = "flex-start" | "flex-end" | "center" | "stretch" | "baseline";
 
-export interface FlexProps {
+export interface FlexProps extends React.HTMLAttributes<HTMLDivElement> {
     inline?: boolean;
     /**
      * Default: "row" 
@@ -52,9 +52,13 @@ export interface FlexProps {
      * Default: "auto"
      */
     basis?: string;
+    margin?: string;
+    padding?: string;
+    width?: string;
+    height?: string;
 }
 
-const StyledFlex = styled("div")<FlexProps>(({ inline, direction, wrap, justify, align, gap, grow, shrink, basis }) => ({
+const StyledFlex = styled("div")<FlexProps>(({ inline, direction, wrap, justify, align, gap, grow, shrink, basis, margin, padding, width, height, style }) => ({
     display: inline ? "inline-flex" : "flex",
     flexDirection: direction ?? "row",
     flexWrap: wrap ?? "nowrap",
@@ -64,6 +68,11 @@ const StyledFlex = styled("div")<FlexProps>(({ inline, direction, wrap, justify,
     flexGrow: typeof grow === "boolean" ? (grow ? 1 : 0) : grow,
     flexShrink: typeof shrink === "boolean" ? (shrink ? 1 : 0) : shrink,
     flexBasis: basis,
+    margin,
+    padding,
+    width,
+    height,
+    ...style,
 }));
 
 export default function Flex({
@@ -77,6 +86,11 @@ export default function Flex({
     grow = false,
     shrink = true,
     basis = "auto",
+    margin = "0",
+    padding = "0",
+    width = "auto",
+    height = "auto",
+    style = {},
 }: React.PropsWithChildren<FlexProps>) {
     return (
         <StyledFlex
@@ -89,6 +103,11 @@ export default function Flex({
             grow={grow}
             shrink={shrink}
             basis={basis}
+            margin={margin}
+            padding={padding}
+            width={width}
+            height={height}
+            style={style}
         >
             {children}
         </StyledFlex>
