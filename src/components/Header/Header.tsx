@@ -15,6 +15,9 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 padding: 8px 20px 8px 8px;
+position: sticky;
+top: 0;
+z-index: 1100;
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -29,16 +32,14 @@ export function Header() {
     const theme = useTheme();
 
     return (
-        <div id="header-container">
-            <StyledHeader theme={theme} >
-                <StyledNavLink to='/' >
-                    <img src={logo} alt={APP_TITLE} style={{ height: '28px' }} />
-                    <Typography variant="h6" color="primary"
-                    >{APP_TITLE}</Typography>
-                </StyledNavLink>
+        <StyledHeader id="layout-header" theme={theme} >
+            <StyledNavLink to='/' >
+                <img src={logo} alt={APP_TITLE} style={{ height: '28px' }} />
+                <Typography variant="h6" color="primary"
+                >{APP_TITLE}</Typography>
+            </StyledNavLink>
 
-                <div>Right</div>
-            </StyledHeader>
-        </div>
+            <div>Right</div>
+        </StyledHeader>
     );
 }

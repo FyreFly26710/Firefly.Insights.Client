@@ -1,23 +1,30 @@
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import { CardMedia } from '@mui/material';
+import { Avatar, CardHeader, Grid } from '@mui/material';
+import type { CategoryDto } from '../types';
+import TopicCard from './TopicCard';
 
 type CategoryCardProps = {
-    title: string;
-    description: string;
-    imageUrl: string;
+    category: CategoryDto;
 }
 
-export default function OutlinedCard({ title, description, imageUrl }: CategoryCardProps) {
+export default function CategoryCard({ category }: CategoryCardProps) {
+    const imageUrl = category.imageUrl || 'https://ih1.redbubble.net/image.5582017600.4418/st,small,507x507-pad,600x600,f8f8f8.webp';
     return (
-        <Card variant="outlined" sx={{ maxWidth: 300 }}>
-            <CardMedia component="img" height="140" image={imageUrl} alt={title} />
-            <CardContent>
-                <Typography variant="h6">{title}</Typography>
-                <Typography variant="body2">{description}</Typography>
+        <Card variant="outlined" >
+            <CardHeader
+                title={category.name}
+                subheader={category.description}
+                avatar={<Avatar src={imageUrl} alt={category.name} />}
+            />
+            <CardContent sx={{ maxHeight: '500px', overflow: 'auto' }}>
+                <Grid container spacing={2}>
+                    {category.categoryTopics.map((topic) => (
+                        <TopicCard key={topic.topicId} {...topic} />
+                    ))}
+                </Grid>
             </CardContent>
-        </Card>
+        </Card >
     );
 }

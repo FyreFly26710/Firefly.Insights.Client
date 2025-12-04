@@ -15,15 +15,28 @@ type AppProviderProps = {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
 
-    const [mode, setMode] = useState<PaletteMode>("light");
+    const getSystemMode = () =>
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+
+    const [mode, setMode] = useState<PaletteMode>(getSystemMode);
+
     useEffect(() => {
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        setMode(mediaQuery.matches ? 'dark' : 'light');
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+        const handler = (event: MediaQueryListEvent) => {
+            setMode(event.matches ? "dark" : "light");
+        };
+
+        mediaQuery.addEventListener("change", handler);
+        return () => mediaQuery.removeEventListener("change", handler);
     }, []);
 
     const theme = createTheme({
         palette: { mode },
     });
+
     return (
         <React.Suspense fallback={<PageSpinner />}>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
