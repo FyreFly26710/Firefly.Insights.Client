@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { PageSpinner } from "@/components/Elements/Spinner/PageSpinner";
 import { CategoryList } from "../components/CategoryList";
 import { Container } from "@mui/material";
-import { Spinner } from "@/components/Elements/Spinner/Spinner";
 
 export const CategoryListPage = () => {
     const { data, isLoading, execute } = useAsync(apiCategoriesGetList);

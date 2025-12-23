@@ -60,6 +60,8 @@ export interface FlexProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const StyledFlex = styled("div")<FlexProps>(({ inline, direction, wrap, justify, align, gap, grow, shrink, basis, margin, padding, width, height, style }) => ({
     display: inline ? "inline-flex" : "flex",
+    minWidth: 0,
+    minHeight: 0,
     flexDirection: direction ?? "row",
     flexWrap: wrap ?? "nowrap",
     justifyContent: justify ?? "flex-start",
