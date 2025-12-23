@@ -1,4 +1,5 @@
 import { Card, CardHeader, Typography, CardContent, Avatar, CardActionArea, Link } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
 type TopicCardProps = {
     topicId: number;
@@ -12,7 +13,7 @@ export default function TopicCard({ topicId, name, description, imageUrl }: Topi
 
     return (
         <Card variant="outlined" sx={{ maxWidth: '300px' }}>
-            <CardActionArea component={Link} href={`/topics/${topicId}`}>
+            <CardActionArea component={RouterLink} to={`/topics/${topicId}`}>
                 <CardHeader
                     title={name}
                     avatar={<Avatar src={defaultImageUrl} alt={name} />}
