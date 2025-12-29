@@ -3,53 +3,36 @@ import {
   ThemeProvider,
   createTheme,
   CssBaseline,
-  type PaletteMode,
 } from "@mui/material";
-
-type ThemeModeContextValue = {
-  mode: PaletteMode;
-  setMode: (mode: PaletteMode) => void;
-  toggleMode: () => void;
-};
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const ThemeModeContext =
-  React.createContext<ThemeModeContextValue | undefined>(undefined);
+import { useThemeStore } from "@/stores/useThemeStore";
 
 type ThemeModeProviderProps = {
   children: React.ReactNode;
-  initialMode?: PaletteMode;
 };
 
-export function ThemeModeProvider({
-  children,
-  initialMode = "light",
-}: ThemeModeProviderProps) {
-  const [mode, setMode] = React.useState<PaletteMode>(initialMode);
-
-  const toggleMode = React.useCallback(() => {
-    setMode((prev) => (prev === "light" ? "dark" : "light"));
-  }, []);
+export function ThemeModeProvider({ children }: ThemeModeProviderProps) {
+  const mode = useThemeStore((state) => state.mode);
 
   const theme = React.useMemo(
     () =>
       createTheme({
-        palette: { mode },
+        palette: {
+          mode,
+          primary: {
+            main: '#1976d2',
+          },
+        },
+        shape: {
+          borderRadius: 8,
+        },
       }),
     [mode]
   );
 
-  const value = React.useMemo(
-    () => ({ mode, setMode, toggleMode }),
-    [mode, toggleMode]
-  );
-
   return (
-    <ThemeModeContext.Provider value={value}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
-    </ThemeModeContext.Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {children}
+    </ThemeProvider>
   );
 }

@@ -1,12 +1,11 @@
-import * as React from "react";
-import { ThemeModeContext } from "../../../providers/ThemeModeProvider";
+import { useThemeStore } from '@/stores/useThemeStore';
 
-export function useThemeMode() {
-  const context = React.useContext(ThemeModeContext);
+export const useThemeMode = () => {
+  const { mode, toggleMode } = useThemeStore();
 
-  if (!context) {
-    throw new Error("useThemeMode must be used within ThemeModeProvider");
-  }
-
-  return context;
-}
+  return {
+    mode,
+    toggleMode,
+    isDark: mode === 'dark'
+  };
+};

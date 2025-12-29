@@ -1,5 +1,5 @@
 
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.svg";
 import { APP_TITLE } from "@/config";
 
@@ -46,7 +46,6 @@ const NAV_TABS = [
 
 export function Header() {
   const theme = useTheme();
-  const navigate = useNavigate();
   const { toggleMode } = useThemeMode();
   const location = useLocation();
 
