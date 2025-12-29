@@ -7,6 +7,7 @@ import type { SidebarArticle } from "@/features/articles/types";
 import { TopicSidebar } from "@/features/articles/components/TopicSidebar";
 import { PageSpinner } from "@/components/Elements/Spinner/PageSpinner";
 import { ErrorPageLayout } from "./ErrorPageLayout";
+import { Container } from "@mui/material";
 
 export const ArticleLayout = () => {
     const { topicId } = useParams();
@@ -24,7 +25,7 @@ export const ArticleLayout = () => {
 
         return data.topicArticles
             .filter((article) => !article.isHidden)
-            .filter((article) => !article.isTopicSummary)
+            // .filter((article) => !article.isTopicSummary)
             .sort((a, b) => a.sortNumber - b.sortNumber)
             .map((article) => ({
                 articleId: article.articleId,
@@ -35,8 +36,8 @@ export const ArticleLayout = () => {
     if (isLoading) {
         return <PageSpinner />;
     }
-    if (error) {
-        return <ErrorPageLayout title="Error" message={error.message} />;
+    if (error || !data) {
+        return <ErrorPageLayout title="Error" message={error?.message ?? "Failed to load topic"} />;
     }
 
     return (
@@ -49,9 +50,9 @@ export const ArticleLayout = () => {
                 imageUrl={data?.imageUrl ?? ''}
                 topicArticles={topicArticles}
             />
-            <Flex grow={1} id="topic-content-area" direction="column" height="100%" width="100%">
+            <Container maxWidth="xl">
                 <Outlet />
-            </Flex>
+            </Container>
 
         </Flex>
     );

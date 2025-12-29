@@ -19,7 +19,7 @@ export type ArticleDto = {
     isHidden: boolean;
     createdAt: string;
     updatedAt: string;
-    tags: string[];
+    tags: TagDto[];
 }
 
 export type PagedArticleDto = {
@@ -29,3 +29,8 @@ export type PagedArticleDto = {
     totalPages: number;
 }
 
+export type TagDto = {
+    tagId: number;
+    name: string;
+    type: string;
+}
