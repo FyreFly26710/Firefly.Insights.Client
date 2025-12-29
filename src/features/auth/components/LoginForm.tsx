@@ -1,8 +1,13 @@
 import { TextField, Button, Alert, Box, Typography, CircularProgress } from '@mui/material';
 import { useLoginUser } from '../hooks/useLoginUser';
+import type { UserDto } from '../types';
 
-export const LoginForm = () => {
-    const { values, handleChange, onSubmit, error, isSubmitting } = useLoginUser();
+export const LoginForm = ({ onSuccess }: { onSuccess: (user: UserDto) => void }) => {
+    const defaultValues = {
+        userAccount: 'TestAdmin',
+        userPassword: 'Password'
+    }
+    const { values, handleChange, onSubmit, error, isSubmitting } = useLoginUser({ defaultValues, onSuccess });
 
     return (
         <Box

@@ -15,6 +15,8 @@ import styled from "@emotion/styled";
 import { useThemeMode } from "@/features/shared/hooks/useThemeMode";
 import Flex from "../Elements/Flex/Flex";
 import { UserHeaderAction } from "@/features/auth/components/UserHeaderAction";
+import { AdminMenu } from "@/features/admins/components/AdminMenu";
+import { useUserStore } from "@/stores/useUserStore";
 
 const StyledHeader = styled("div")`
   margin-bottom: 4px;
@@ -50,7 +52,8 @@ export function Header() {
   const location = useLocation();
 
   const isDark = theme.palette.mode === "dark";
-
+  const { isAuthenticated, user } = useUserStore();
+  const isAdmin = isAuthenticated && user?.userRole === 'admin';
   return (
     <StyledHeader id="layout-header" theme={theme}>
       <Flex id="layout-header-left" gap={24}>
@@ -72,6 +75,7 @@ export function Header() {
             <Tab key={tab.to} label={tab.label} value={tab.to} to={tab.to} component={NavLink} />
           ))}
         </Tabs>
+        {isAdmin && <AdminMenu />}
       </Flex>
 
       <Flex id="layout-header-right" gap={12} align="center">

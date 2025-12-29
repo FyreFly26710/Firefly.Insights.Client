@@ -4,7 +4,7 @@ import { Outlet, type RouteObject } from 'react-router-dom';
 
 const { Home } = lazily(() => import('@/pages/Home/Home'));
 const { NotFound } = lazily(() => import('@/pages/NotFound/NotFound'));
-
+const { Unauthorized } = lazily(() => import('@/pages/Unauthorized/Unauthorized'));
 
 export const commonRoutes = (): RouteObject[] => [
     {
@@ -16,6 +16,7 @@ export const commonRoutes = (): RouteObject[] => [
                 element: <Outlet />,
                 children: articleRoutes
             },
+            { path: "unauthorized", element: <Unauthorized /> },
             { path: "*", element: <NotFound /> }
         ]
     }

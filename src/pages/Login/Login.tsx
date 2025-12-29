@@ -1,8 +1,11 @@
 import GmailLoginBtn from "@/features/auth/components/GmailLoginBtn";
 import { LoginForm } from "@/features/auth/components/LoginForm";
+import { useRedirectAfterLogin } from "@/features/auth/hooks/useRedirectAfterLogin";
 import { Box, Divider, Paper, Typography, Container } from "@mui/material";
 
 export const Login = () => {
+    const redirectAfterLogin = useRedirectAfterLogin();
+
     return (
         <Box
             component="main"
@@ -41,7 +44,7 @@ export const Login = () => {
                         OR
                     </Divider>
 
-                    <LoginForm />
+                    <LoginForm onSuccess={redirectAfterLogin} />
 
                     <Box sx={{ mt: 3 }}>
                         <Typography variant="caption" color="text.secondary">
