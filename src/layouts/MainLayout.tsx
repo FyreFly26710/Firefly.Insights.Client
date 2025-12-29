@@ -1,5 +1,5 @@
-import Flex from "@/components/Elements/Flex/Flex";
 import { Header } from "@/components/Header/Header";
+import { Box } from "@mui/material";
 import React from "react";
 type MainLayoutProps = {
   children: React.ReactNode;
@@ -7,9 +7,16 @@ type MainLayoutProps = {
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
-    <Flex id="layout-main" direction="column" height="100%" width="100%">
+    <Box component="main"
+      sx={{
+        height: "100vh",
+        width: "100vw",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+      }}>
       <Header />
       {children}
-    </Flex>
+    </Box>
   );
 };

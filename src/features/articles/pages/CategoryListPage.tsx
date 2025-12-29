@@ -1,26 +1,21 @@
-import { useAsync } from "@/features/shared/hooks/useAsync ";
-import { apiCategoriesGetList } from "../api";
-import { useEffect } from "react";
-import { PageSpinner } from "@/components/Elements/Spinner/PageSpinner";
-import { CategoryList } from "../components/CategoryList";
+import { use, useMemo } from "react";
 import { Container } from "@mui/material";
+import { apiCategoriesGetList } from "../api";
+import { CategoryList } from "../components/CategoryList";
+
+// Fetch starts immediately when the module loads
+const categoriesPromise = apiCategoriesGetList();
 
 export const CategoryListPage = () => {
-    const { data, isLoading, execute } = useAsync(apiCategoriesGetList);
+    const data = use(categoriesPromise);
 
-    useEffect(() => {
-        execute();
-    }, []);
-
-    if (isLoading) {
-        return <PageSpinner />;
-    }
+    const filteredCategories = useMemo(() => {
+        return (data ?? []).filter(cat => cat.categoryId !== 0);
+    }, [data]);
 
     return (
-        <div id="category-list-page">
-            <Container>
-                <CategoryList categories={data ?? []} />
-            </Container>
-        </div>
+        <Container id="category-list-page">
+            <CategoryList categories={filteredCategories} />
+        </Container>
     );
-}
+};

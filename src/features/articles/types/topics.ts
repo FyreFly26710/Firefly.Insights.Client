@@ -8,7 +8,7 @@ export type TopicDto = {
     sortNumber: number;
     isHidden: boolean;
     topicArticles: TopicArticleDto[];
-    
+
 }
 
 export type TopicArticleDto = {
@@ -19,4 +19,5 @@ export type TopicArticleDto = {
     sortNumber: number;
     isHidden: boolean;
     tags: string[];
+    isTopicSummary: boolean;
 }

@@ -16,6 +16,7 @@ export const useAsync = <T, Args extends any[]>(
             return result;
         } catch (err) {
             setError(err as Error);
+            console.error(err);
         } finally {
             setIsLoading(false);
         }

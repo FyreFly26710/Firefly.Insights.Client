@@ -1,26 +1,27 @@
-import { lazily } from 'react-lazily';
+import { ArticleLayout } from '@/layouts/ArticleLayout';
 import { ArticlePage } from '../pages/ArticlePage';
 import { CategoryListPage } from '../pages/CategoryListPage';
 import { TopicPage } from '../pages/TopicPage';
+import type { RouteObject } from 'react-router-dom';
 
 
-const { NotFound } = lazily(() => import('@/pages/NotFound/NotFound'));
-
-export const ArticleRoutes = () => ([
+export const articleRoutes: RouteObject[] = [
     {
         index: true,
         element: <CategoryListPage />
     },
     {
         path: ":topicId",
-        element: <TopicPage />
-    },
-    {
-        path: ":topicId/articles/:articleId",
-        element: <ArticlePage />
-    },
-    {
-        path: "*",
-        element: <NotFound />
+        element: <ArticleLayout />,
+        children: [
+            {
+                index: true,
+                element: <TopicPage />
+            },
+            {
+                path: "articles/:articleId",
+                element: <ArticlePage />
+            }
+        ]
     }
-]);
+];

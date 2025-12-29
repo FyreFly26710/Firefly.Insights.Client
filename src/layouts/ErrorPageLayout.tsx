@@ -11,7 +11,7 @@ type ErrorPageLayoutProps = {
 
 export const ErrorPageLayout = ({ children, title, message, button }: ErrorPageLayoutProps) => {
     return (
-        <div className='flex flex-col items-center justify-center h-screen'>
+        <div id="error-page-layout" className='flex flex-col items-center justify-center h-screen'>
             <h1 className='text-4xl font-bold'>{title}</h1>
             <h2 className='lead'>{message}</h2>
             {children}

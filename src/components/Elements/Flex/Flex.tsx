@@ -1,8 +1,8 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 
+export type Overflow = "visible" | "hidden" | "clip" | "scroll" | "auto";
 export type FlexDirection = "row" | "row-reverse" | "column" | "column-reverse";
-export type FlexWrap = "nowrap" | "wrap" | "wrap-reverse";
 export type JustifyContent =
   | "flex-start"
   | "flex-end"
@@ -18,19 +18,13 @@ export type AlignItems =
   | "baseline";
 
 export interface FlexProps extends React.HTMLAttributes<HTMLDivElement> {
-  inline?: boolean;
   /**
    * Default: "row"
    *
    * **Syntax**: "row" | "row-reverse" | "column" | "column-reverse";
    */
   direction?: FlexDirection;
-  /**
-   * Default: "nowrap"
-   *
-   * **Syntax**: "nowrap" | "wrap" | "wrap-reverse";
-   */
-  wrap?: FlexWrap;
+
   /**
    * Default: "flex-start"
    *
@@ -53,8 +47,11 @@ export interface FlexProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   shrink?: boolean | number;
   /**
-   * Default: "auto"
+   * Default: "visible"
+   *
+   * **Syntax**: "visible" | "hidden" | "clip" | "scroll" | "auto";
    */
+  overflow?: Overflow;
   basis?: string;
   margin?: string;
   padding?: string;
@@ -64,9 +61,7 @@ export interface FlexProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const StyledFlex = styled("div")<FlexProps>(
   ({
-    inline,
     direction,
-    wrap,
     justify,
     align,
     gap,
@@ -77,13 +72,12 @@ const StyledFlex = styled("div")<FlexProps>(
     padding,
     width,
     height,
-    style,
+    overflow,
   }) => ({
-    display: inline ? "inline-flex" : "flex",
+    display: "flex",
     minWidth: 0,
     minHeight: 0,
     flexDirection: direction ?? "row",
-    flexWrap: wrap ?? "nowrap",
     justifyContent: justify ?? "flex-start",
     alignItems: align ?? "stretch",
     gap,
@@ -94,15 +88,13 @@ const StyledFlex = styled("div")<FlexProps>(
     padding,
     width,
     height,
-    ...style,
+    overflow,
   })
 );
 
 export default function Flex({
   children,
-  inline = false,
   direction = "row",
-  wrap = "nowrap",
   justify = "flex-start",
   align = "stretch",
   gap = 0,
@@ -113,14 +105,13 @@ export default function Flex({
   padding = "0",
   width = "auto",
   height = "auto",
-  style = {},
+  overflow = "visible",
   ...rest
 }: React.PropsWithChildren<FlexProps>) {
   return (
     <StyledFlex
-      inline={inline}
+      {...rest}
       direction={direction}
-      wrap={wrap}
       justify={justify}
       align={align}
       gap={gap}
@@ -131,8 +122,7 @@ export default function Flex({
       padding={padding}
       width={width}
       height={height}
-      style={style}
-      {...rest}
+      overflow={overflow}
     >
       {children}
     </StyledFlex>

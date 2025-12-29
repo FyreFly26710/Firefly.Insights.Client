@@ -1,5 +1,5 @@
-import { Card, CardHeader, Typography, CardContent, Avatar, CardActionArea, Link } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Card, CardHeader, Typography, CardContent, Avatar, CardActionArea } from "@mui/material";
+import { Link } from "react-router-dom";
 
 type TopicCardProps = {
     topicId: number;
@@ -12,8 +12,8 @@ export default function TopicCard({ topicId, name, description, imageUrl }: Topi
     const defaultImageUrl = imageUrl || 'https://ih1.redbubble.net/image.5582017600.4418/st,small,507x507-pad,600x600,f8f8f8.webp';
 
     return (
-        <Card variant="outlined" sx={{ maxWidth: '300px' }}>
-            <CardActionArea component={RouterLink} to={`/topics/${topicId}`}>
+        <Card id="topic-card" variant="outlined" sx={{ maxWidth: '300px' }}>
+            <CardActionArea component={Link} to={`/topics/${topicId}`}>
                 <CardHeader
                     title={name}
                     avatar={<Avatar src={defaultImageUrl} alt={name} />}

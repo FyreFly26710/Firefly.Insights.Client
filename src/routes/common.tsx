@@ -1,21 +1,22 @@
-import { ArticleRoutes } from '@/features/articles/routes/ArticleRoutes';
+import { articleRoutes } from '@/features/articles/routes/ArticleRoutes';
 import { lazily } from 'react-lazily';
+import { Outlet, type RouteObject } from 'react-router-dom';
 
 const { Home } = lazily(() => import('@/pages/Home/Home'));
 const { NotFound } = lazily(() => import('@/pages/NotFound/NotFound'));
-// const { Posts } = lazily(() => import('@/pages/Posts/Posts'));
 
-export const commonRoutes = () => [
+
+export const commonRoutes = (): RouteObject[] => [
     {
         path: "/",
-        element: <Home />
-    },
-    {
-        path: "/topics",
-        children: ArticleRoutes()
-    },
-    {
-        path: "*",
-        element: <NotFound />
+        children: [
+            { index: true, element: <Home /> },
+            {
+                path: "topics",
+                element: <Outlet />,
+                children: articleRoutes
+            },
+            { path: "*", element: <NotFound /> }
+        ]
     }
 ];

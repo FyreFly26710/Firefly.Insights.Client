@@ -9,7 +9,7 @@ export const CategoryList = ({ categories }: CategoryListProps) => {
 
 
     return (
-        <Flex direction="column" gap={8}>
+        <Flex id="category-list" direction="column" gap={8}>
             {categories.map((category) => (
                 <CategoryCard key={category.categoryId} category={category} />
             ))}
