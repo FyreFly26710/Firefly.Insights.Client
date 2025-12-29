@@ -1,16 +1,17 @@
+import { Suspense } from 'react';
 import { useRoutes } from 'react-router-dom';
-// import { useAuth } from '@/features/auth';
 
 import { commonRoutes } from './common';
-// import { publicRoutes } from './public';
-// import { protectedRoutes } from './protected';
+import { publicRoutes } from './public';
+import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
 
 export const AppRoutes = () => {
-    // const { user } = useAuth();
-
-    // const routes = [...protectedRoutes({ user }), ...publicRoutes({ user }), ...commonRoutes()];
-    const routes = commonRoutes();
+    const routes = [...publicRoutes(), ...commonRoutes()];
     const element = useRoutes(routes);
 
-    return element;
+    return (
+        <Suspense fallback={<PageSpinner />}>
+            {element}
+        </Suspense>
+    );
 };

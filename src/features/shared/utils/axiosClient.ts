@@ -1,4 +1,5 @@
 import { API_URL } from '@/config';
+import { useUserStore } from '@/stores/useUserStore';
 import axios from 'axios';
 
 export const axiosClient = axios.create({
@@ -10,7 +11,7 @@ export const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token'); // todo: use Zustand store
+    const token = useUserStore.getState().token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
