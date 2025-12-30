@@ -1,8 +1,15 @@
 import type { PageRequest } from '@/features/shared/types';
+import type { TagDto } from './tags';
 
 export type ArticleListRequest = PageRequest & {
     articleTitle?: string;
-}
+    topicId?: number;
+    isTopicSummary?: boolean;
+    isHidden?: boolean;
+    userId?: number;
+    tags?: string[] | null;
+};
+
 
 export type ArticleDto = {
     articleId: number;
@@ -29,8 +36,21 @@ export type PagedArticleDto = {
     totalPages: number;
 }
 
-export type TagDto = {
-    tagId: number;
-    name: string;
-    type: string;
-}
+export type ArticleBase = {
+    title: string;
+    content: string;
+    description: string;
+    imageUrl: string;
+    topicId: string;
+    isTopicSummary: boolean;
+    sortNumber: number;
+    isHidden: boolean;
+    tags?: string[];
+};
+
+export type ArticleCreateRequest = ArticleBase;
+
+export type ArticleUpdateRequest = Partial<ArticleBase> & {
+    articleId: number;
+};
+

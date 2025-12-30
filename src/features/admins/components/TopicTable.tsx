@@ -15,21 +15,21 @@ import {
 } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import type { ArticleDto, ArticleListRequest } from '@/features/articles/api-types';
+import type { TopicDto, TopicListRequest } from '@/features/articles/api-types';
 
-interface ArticleTableProps {
-    articles: ArticleDto[];
+interface TopicTableProps {
+    topics: TopicDto[];
     totalCount: number;
     isLoading: boolean;
-    query: ArticleListRequest;
-    onQueryChange: (updates: Partial<ArticleListRequest>) => void;
-    onEdit: (article: ArticleDto) => void;
-    onDelete: (articleId: number) => void;
+    query: TopicListRequest;
+    onQueryChange: (updates: Partial<TopicListRequest>) => void;
+    onEdit: (topic: TopicDto) => void;
+    onDelete: (topicId: number) => void;
 }
 
 // 1. Column Definitions
-export const ArticleTable: React.FC<ArticleTableProps> = ({
-    articles,
+export const TopicTable: React.FC<TopicTableProps> = ({
+    topics,
     totalCount,
     isLoading,
     query,
@@ -38,17 +38,16 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
     onDelete
 }) => {
 
-    // 1. Column Definitions refined for .NET Backend constraints
-    const columns: GridColDef<ArticleDto>[] = [
+    const columns: GridColDef<TopicDto>[] = [
         {
-            field: 'articleId',
+            field: 'topicId',
             headerName: 'ID',
             width: 130,
             sortable: true
         },
         {
-            field: 'title',
-            headerName: 'Title',
+            field: 'name',
+            headerName: 'Name',
             flex: 1,
             minWidth: 200,
             sortable: false,
@@ -59,8 +58,8 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
             )
         },
         {
-            field: 'topicName',
-            headerName: 'Topic Name',
+            field: 'categoryName',
+            headerName: 'Category Name',
             width: 150,
             sortable: false
         },
@@ -107,7 +106,7 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Delete">
-                        <IconButton size="small" color="error" onClick={() => onDelete(params.row.articleId)}>
+                        <IconButton size="small" color="error" onClick={() => onDelete(params.row.topicId)}>
                             <DeleteIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
@@ -136,9 +135,9 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
     return (
         <Paper sx={{ width: '100%', height: 'calc(100vh - 300px)', minHeight: 400 }}>
             <DataGrid
-                rows={articles}
+                rows={topics}
                 columns={columns}
-                getRowId={(row) => row.articleId}
+                getRowId={(row) => row.topicId}
                 loading={isLoading}
 
                 // Server-side Logic

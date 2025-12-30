@@ -1,5 +1,5 @@
 import { axiosClient } from '@/features/shared/utils/axiosClient';
-import type { CategoryDto } from '../types';
+import type { CategoryDto } from '../api-types';
 
 export const apiCategoriesGetList = async () => {
     const response = await axiosClient.get(`/contents/categories`);

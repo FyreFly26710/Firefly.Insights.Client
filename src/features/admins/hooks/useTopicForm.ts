@@ -1,33 +1,30 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-    apiArticlesGetById,
-    apiArticlesCreate,
-    apiArticlesUpdate,
+    apiTopicsGetById,
+    apiTopicsCreate,
+    apiTopicsUpdate,
 } from '@/features/articles/api';
-import type { ArticleCreateRequest, ArticleUpdateRequest } from '@/features/articles/api-types';
+import type { TopicCreateRequest, TopicUpdateRequest } from '@/features/articles/api-types';
 
-interface UseArticleFormProps {
-    articleId?: number | null;
+interface UseTopicFormProps {
+    topicId?: number | null;
     onSuccess: () => void;
 }
 
-export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) => {
+export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // 1. Initialize React Hook Form
-    const form = useForm<ArticleCreateRequest>({
+    const form = useForm<TopicCreateRequest>({
         defaultValues: {
-            title: '',
-            content: '',
+            name: '',
             description: '',
+            categoryId: undefined,
             imageUrl: '',
-            topicId: '',
-            isTopicSummary: false,
             sortNumber: 0,
             isHidden: false,
-            tags: [],
         }
     });
 
@@ -35,25 +32,22 @@ export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) =>
 
     // 2. Fetch data if in Edit Mode
     useEffect(() => {
-        if (articleId) {
+        if (topicId) {
             const fetchDetail = async () => {
                 setIsLoading(true);
                 try {
-                    const data = await apiArticlesGetById(articleId);
+                    const data = await apiTopicsGetById(topicId);
                     // Map DTO to Form Fields
                     reset({
-                        title: data.title,
-                        content: data.content,
+                        name: data.name,
                         description: data.description,
+                        categoryId: data.categoryId,
                         imageUrl: data.imageUrl,
-                        topicId: data.topicId,
-                        isTopicSummary: data.isTopicSummary,
                         sortNumber: data.sortNumber,
                         isHidden: data.isHidden,
-                        tags: data.tags.map(t => t.name) // Convert TagDto[] to string[]
                     });
                 } catch (error) {
-                    console.error("Failed to load article details", error);
+                    console.error("Failed to load topic details", error);
                 } finally {
                     setIsLoading(false);
                 }
@@ -62,33 +56,30 @@ export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) =>
         } else {
             // Reset to defaults if creating new
             reset({
-                title: '',
-                content: '',
+                name: '',
                 description: '',
+                categoryId: undefined,
                 imageUrl: '',
-                topicId: '',
-                isTopicSummary: false,
                 sortNumber: 0,
                 isHidden: false,
-                tags: [],
             });
         }
-    }, [articleId, reset]);
+    }, [topicId, reset]);
 
     // 3. Handle Submission
-    const onSubmit = async (values: ArticleCreateRequest) => {
+    const onSubmit = async (values: TopicCreateRequest) => {
         setIsSubmitting(true);
         try {
-            if (articleId) {
-                // Update Mode: Construct ArticleUpdateRequest
-                const updateRequest: ArticleUpdateRequest = {
-                    articleId,
+            if (topicId) {
+                // Update Mode: Construct TopicUpdateRequest
+                const updateRequest: TopicUpdateRequest = {
+                    topicId,
                     ...values,
                 };
-                await apiArticlesUpdate(articleId, updateRequest);
+                await apiTopicsUpdate(topicId, updateRequest);
             } else {
                 // Create Mode
-                await apiArticlesCreate(values);
+                await apiTopicsCreate(values);
             }
             onSuccess();
         } catch (error) {
@@ -103,6 +94,6 @@ export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) =>
         onSubmit: handleSubmit(onSubmit),
         isLoading, // Initial loading for edit mode
         isSubmitting, // Submission loading
-        isEdit: !!articleId
+        isEdit: !!topicId
     };
 };

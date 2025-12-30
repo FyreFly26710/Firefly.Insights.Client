@@ -9,25 +9,25 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import type { ArticleListRequest } from '@/features/articles/api-types';
+import type { TopicListRequest } from '@/features/articles/api-types';
 
-interface ArticleFiltersProps {
-    query: ArticleListRequest;
-    onFilterChange: (updates: Partial<ArticleListRequest>) => void;
+interface TopicFiltersProps {
+    query: TopicListRequest;
+    onFilterChange: (updates: Partial<TopicListRequest>) => void;
 }
 
-export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
+export const TopicFilters: React.FC<TopicFiltersProps> = ({
     query,
     onFilterChange
 }) => {
     // Local state for the search text to handle debouncing
-    const [searchTerm, setSearchTerm] = useState(query.articleTitle || '');
+    const [searchTerm, setSearchTerm] = useState(query.topicName || '');
 
     // 1. Debounce Logic: Only trigger API call after user stops typing for 500ms
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            if (searchTerm !== query.articleTitle) {
-                onFilterChange({ articleTitle: searchTerm });
+            if (searchTerm !== query.topicName) {
+                onFilterChange({ topicName: searchTerm });
             }
         }, 500);
 
@@ -37,7 +37,7 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
     // 2. Clear Search Helper
     const handleClearSearch = () => {
         setSearchTerm('');
-        onFilterChange({ articleTitle: '' });
+        onFilterChange({ topicName: '' });
     };
 
     return (
@@ -46,7 +46,7 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
 
                 {/* Title Search */}
                 <TextField
-                    label="Search Articles"
+                    label="Search Topics"
                     size="small"
                     placeholder="Type to search..."
                     value={searchTerm}
@@ -85,25 +85,6 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
                     <MenuItem value="all">All Status</MenuItem>
                     <MenuItem value="false">Visible Only</MenuItem>
                     <MenuItem value="true">Hidden Only</MenuItem>
-                </TextField>
-
-                {/* Topic Summary Filter */}
-                <TextField
-                    select
-                    label="Topic Type"
-                    size="small"
-                    value={query.isTopicSummary === undefined ? 'all' : query.isTopicSummary.toString()}
-                    onChange={(e) => {
-                        const val = e.target.value;
-                        onFilterChange({
-                            isTopicSummary: val === 'all' ? undefined : val === 'true'
-                        });
-                    }}
-                    sx={{ minWidth: 180 }}
-                >
-                    <MenuItem value="all">Any Type</MenuItem>
-                    <MenuItem value="true">Topic Summaries</MenuItem>
-                    <MenuItem value="false">Standard Articles</MenuItem>
                 </TextField>
 
             </Stack>

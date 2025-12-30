@@ -3,32 +3,32 @@ import { Box, Typography, Button, Stack, Container, Alert, Snackbar } from '@mui
 import AddIcon from '@mui/icons-material/Add';
 
 // Internal Imports
-import { useArticlesTable } from '../hooks/useArticlesTable';
-import { ArticleTable } from '../components/ArticleTable';
-import { ArticleFilters } from '../components/ArticleFilters';
-import { ArticleFormDrawer } from '../components/ArticleFormDrawer';
-import { ArticleDeleteDialog } from '../components/ArticleDeleteDialog'; 
-import type { ArticleDto } from '@/features/articles/api-types';
-import { apiArticlesDelete } from '@/features/articles/api';
+import { TopicTable } from '../components/TopicTable';
+import { TopicFormDrawer } from '../components/TopicFormDrawer';
+import { TopicDeleteDialog } from '../components/TopicDeleteDialog';
+import type { TopicDto } from '@/features/articles/api-types';
+import { apiTopicsDelete } from '@/features/articles/api';
+import { useTopicsTable } from '../hooks/useTopicsTable';
+import { TopicFilters } from '../components/TopicFilters';
 
-export const Articles = () => {
+export const Topics = () => {
     // 1. Data Engine Hook (Handles API fetch, pagination, sorting, filtering)
     const {
-        articles,
+        topics,
         totalCount,
         isLoading,
         query,
         updateQuery,
         refresh
-    } = useArticlesTable();
+    } = useTopicsTable();
 
     // 2. UI State for Dialogs and Drawers
-    const [selectedArticle, setSelectedArticle] = useState<ArticleDto | null>(null);
+    const [selectedTopic, setSelectedTopic] = useState<TopicDto | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
 
     // Delete Dialog State
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [articleToDelete, setArticleToDelete] = useState<{ id: number; title: string } | null>(null);
+    const [topicToDelete, setTopicToDelete] = useState<{ id: number; title: string } | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
     // Notification State
@@ -42,39 +42,39 @@ export const Articles = () => {
 
     // --- Create/Edit ---
     const handleCreate = () => {
-        setSelectedArticle(null);
+        setSelectedTopic(null);
         setIsFormOpen(true);
     };
 
-    const handleEdit = (article: ArticleDto) => {
-        setSelectedArticle(article);
+    const handleEdit = (topic: TopicDto) => {
+        setSelectedTopic(topic);
         setIsFormOpen(true);
     };
 
     const handleFormSuccess = () => {
         setIsFormOpen(false);
-        setNotification({ open: true, message: 'Article saved successfully', severity: 'success' });
+        setNotification({ open: true, message: 'Topic saved successfully', severity: 'success' });
         refresh(); // Reload table data
     };
 
     // --- Delete ---
     const handleDeleteClick = (id: number) => {
-        const article = articles.find(a => a.articleId === id);
-        if (article) {
-            setArticleToDelete({ id: article.articleId, title: article.title });
+        const topic = topics.find(a => a.topicId === id);
+        if (topic) {
+            setTopicToDelete({ id: topic.topicId, title: topic.name });
             setDeleteDialogOpen(true);
         }
     };
 
     const handleConfirmDelete = async () => {
-        if (!articleToDelete) return;
+        if (!topicToDelete) return;
 
         setIsDeleting(true);
         try {
-            await apiArticlesDelete(articleToDelete.id);
+            await apiTopicsDelete(topicToDelete.id);
             setNotification({
                 open: true,
-                message: 'Article deleted successfully',
+                message: 'Topic deleted successfully',
                 severity: 'success'
             });
             setDeleteDialogOpen(false);
@@ -82,12 +82,12 @@ export const Articles = () => {
         } catch (error) {
             setNotification({
                 open: true,
-                message: 'Failed to delete article',
+                message: 'Failed to delete topic',
                 severity: 'error'
             });
         } finally {
             setIsDeleting(false);
-            setArticleToDelete(null);
+            setTopicToDelete(null);
         }
     };
 
@@ -97,7 +97,7 @@ export const Articles = () => {
             <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
                 <Box>
                     <Typography variant="h4" fontWeight={800} color="text.primary">
-                        Articles
+                        Topics
                     </Typography>
                 </Box>
                 <Button
@@ -107,19 +107,19 @@ export const Articles = () => {
                     onClick={handleCreate}
                     sx={{ borderRadius: 2, textTransform: 'none', px: 3 }}
                 >
-                    New Article
+                    New Topic
                 </Button>
             </Stack>
 
             {/* 1. Filtering UI */}
-            <ArticleFilters
+            <TopicFilters
                 query={query}
                 onFilterChange={updateQuery}
             />
 
             {/* 2. Data Table UI */}
-            <ArticleTable
-                articles={articles}
+            <TopicTable
+                topics={topics}
                 totalCount={totalCount}
                 isLoading={isLoading}
                 query={query}
@@ -129,17 +129,17 @@ export const Articles = () => {
             />
 
             {/* 3. Sliding Form Drawer (Create/Edit) */}
-            <ArticleFormDrawer
+            <TopicFormDrawer
                 open={isFormOpen}
-                article={selectedArticle}
+                topic={selectedTopic}
                 onClose={() => setIsFormOpen(false)}
                 onSuccess={handleFormSuccess}
             />
 
             {/* 4. Confirmation Dialog (Delete) */}
-            <ArticleDeleteDialog
+            <TopicDeleteDialog
                 open={deleteDialogOpen}
-                title={articleToDelete?.title || ''}
+                title={topicToDelete?.title || ''}
                 isLoading={isDeleting}
                 onClose={() => setDeleteDialogOpen(false)}
                 onConfirm={handleConfirmDelete}

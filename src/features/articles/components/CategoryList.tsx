@@ -1,5 +1,5 @@
 import CategoryCard from "./CategoryCard";
-import type { CategoryDto } from "../types";
+import type { CategoryDto } from "../api-types";
 import Flex from "@/components/Elements/Flex/Flex";
 
 type CategoryListProps = {

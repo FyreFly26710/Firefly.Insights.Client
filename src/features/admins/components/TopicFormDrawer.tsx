@@ -16,24 +16,24 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import { Controller } from 'react-hook-form';
-import { useArticleForm } from '../hooks/useArticleForm';
-import type { ArticleDto } from '@/features/articles/api-types';
+import { useTopicForm } from '../hooks/useTopicForm';
+import type { TopicDto } from '@/features/articles/api-types';
 
-interface ArticleFormDrawerProps {
+interface TopicFormDrawerProps {
     open: boolean;
-    article: ArticleDto | null;
+    topic: TopicDto | null;
     onClose: () => void;
     onSuccess: () => void;
 }
 
-export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
+export const TopicFormDrawer: React.FC<TopicFormDrawerProps> = ({
     open,
-    article,
+    topic,
     onClose,
     onSuccess
 }) => {
-    const { form, onSubmit, isLoading, isSubmitting, isEdit } = useArticleForm({
-        articleId: article?.articleId,
+    const { form, onSubmit, isLoading, isSubmitting, isEdit } = useTopicForm({
+        topicId: topic?.topicId,
         onSuccess
     });
 
@@ -51,7 +51,7 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
                 {/* Header */}
                 <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant="h6" fontWeight={700}>
-                        {isEdit ? 'Edit Article' : 'Create New Article'}
+                        {isEdit ? 'Edit Topic' : 'Create New Topic'}
                     </Typography>
                     <IconButton onClick={onClose} edge="end">
                         <CloseIcon />
@@ -67,22 +67,22 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
                             <CircularProgress />
                         </Box>
                     ) : (
-                        <Stack spacing={3} component="form" id="article-form" onSubmit={onSubmit}>
+                        <Stack spacing={3} component="form" id="topic-form" onSubmit={onSubmit}>
 
                             <TextField
-                                label="Article Title"
+                                label="Topic Title"
                                 fullWidth
-                                {...register('title', { required: 'Title is required' })}
-                                error={!!errors.title}
-                                helperText={errors.title?.message}
+                                {...register('name', { required: 'Name is required' })}
+                                error={!!errors.name}
+                                helperText={errors.name?.message}
                             />
 
                             <TextField
-                                label="Topic ID"
+                                label="Category ID"
                                 fullWidth
-                                {...register('topicId', { required: 'Topic is required' })}
-                                error={!!errors.topicId}
-                                helperText={errors.topicId?.message}
+                                {...register('categoryId', { required: 'Category is required' })}
+                                error={!!errors.categoryId}
+                                helperText={errors.categoryId?.message}
                             />
 
                             <TextField
@@ -98,16 +98,6 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
                                 multiline
                                 rows={2}
                                 {...register('description')}
-                            />
-
-                            <TextField
-                                label="Content"
-                                fullWidth
-                                multiline
-                                rows={8}
-                                {...register('content', { required: 'Content is required' })}
-                                error={!!errors.content}
-                                helperText={errors.content?.message}
                             />
 
                             <Grid container spacing={2}>
@@ -126,23 +116,12 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
                                         render={({ field }) => (
                                             <FormControlLabel
                                                 control={<Checkbox {...field} checked={!!field.value} />}
-                                                label="Hide Article"
+                                                label="Hide Topic"
                                             />
                                         )}
                                     />
                                 </Grid>
                             </Grid>
-
-                            <Controller
-                                name="isTopicSummary"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControlLabel
-                                        control={<Checkbox {...field} checked={field.value} />}
-                                        label="Mark as Topic Summary"
-                                    />
-                                )}
-                            />
                         </Stack>
                     )}
                 </Box>
@@ -164,11 +143,11 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
                             fullWidth
                             variant="contained"
                             type="submit"
-                            form="article-form"
+                            form="topic-form"
                             startIcon={isSubmitting ? <CircularProgress size={20} /> : <SaveIcon />}
                             disabled={isSubmitting || isLoading}
                         >
-                            {isEdit ? 'Update Article' : 'Create Article'}
+                            {isEdit ? 'Update Topic' : 'Create Topic'}
                         </Button>
                     </Stack>
                 </Box>

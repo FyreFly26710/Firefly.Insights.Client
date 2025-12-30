@@ -1,33 +1,30 @@
 import { useState, useEffect, useCallback } from 'react';
-import { apiArticlesGetList } from '@/features/articles/api';
-import type { ArticleDto, ArticleListRequest } from '@/features/articles/api-types';
+import { apiTopicsGetList } from '@/features/articles/api';
+import type { TopicDto, TopicListRequest } from '@/features/articles/api-types';
 
-export const useArticlesTable = () => {
-    const [articles, setArticles] = useState<ArticleDto[]>([]);
+export const useTopicsTable = () => {
+    const [topics, setTopics] = useState<TopicDto[]>([]);
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
     // 1. Initial State for the .NET API request
-    const [query, setQuery] = useState<ArticleListRequest>({
+    const [query, setQuery] = useState<TopicListRequest>({
         pageNumber: 1,
         pageSize: 25,
         sortField: 'updatedAt',
         isAscending: false,
-        // articleTitle: '',
-        // topicId: undefined,
-        // isHidden: undefined,
     });
 
     // 2. The Fetcher Function
-    const fetchArticles = useCallback(async () => {
+    const fetchTopics = useCallback(async () => {
         setIsLoading(true);
         try {
-            const result = await apiArticlesGetList(query);
-            setArticles(result.data);
+            const result = await apiTopicsGetList(query);
+            setTopics(result.data);
             setTotalCount(result.totalCount);
         } catch (error) {
             // In a real app, you might trigger a global notification/toast here
-            console.error('Failed to fetch articles:', error);
+            console.error('Failed to fetch topics:', error);
         } finally {
             setIsLoading(false);
         }
@@ -35,11 +32,11 @@ export const useArticlesTable = () => {
 
     // 3. Re-run whenever the query object changes
     useEffect(() => {
-        fetchArticles();
-    }, [fetchArticles]);
+        fetchTopics();
+    }, [fetchTopics]);
 
     // 4. Update helpers to keep the UI components "dumb"
-    const updateQuery = (updates: Partial<ArticleListRequest>) => {
+    const updateQuery = (updates: Partial<TopicListRequest>) => {
         setQuery((prev) => ({
             ...prev,
             ...updates,
@@ -47,11 +44,11 @@ export const useArticlesTable = () => {
         }));
     };
 
-    const refresh = () => fetchArticles();
+    const refresh = () => fetchTopics();
 
     return {
         // Data & State
-        articles,
+        topics,
         totalCount,
         isLoading,
         query,
