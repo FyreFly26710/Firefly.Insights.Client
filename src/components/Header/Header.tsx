@@ -54,6 +54,12 @@ export function Header() {
   const isDark = theme.palette.mode === "dark";
   const { isAuthenticated, user } = useUserStore();
   const isAdmin = isAuthenticated && user?.userRole === 'admin';
+
+  const currentTab = NAV_TABS.find(tab =>
+    tab.to === '/'
+      ? location.pathname === '/'
+      : location.pathname.startsWith(tab.to)
+  )?.to;
   return (
     <StyledHeader id="layout-header" theme={theme}>
       <Flex id="layout-header-left" gap={24}>
@@ -65,9 +71,7 @@ export function Header() {
         </StyledNavLink>
 
         <Tabs
-          value={NAV_TABS.some(tab => location.pathname.startsWith(tab.to) && tab.to !== '/')
-            ? NAV_TABS.find(tab => location.pathname.startsWith(tab.to) && tab.to !== '/')?.to
-            : location.pathname}
+          value={currentTab}
           textColor="primary"
           indicatorColor="primary"
         >

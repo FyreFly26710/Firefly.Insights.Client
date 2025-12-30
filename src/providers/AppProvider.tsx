@@ -4,7 +4,6 @@ import { BrowserRouter } from 'react-router-dom';
 import { CssBaseline } from "@mui/material";
 
 import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
-import { AuthProvider } from '@/features/auth';
 import { ErrorFallback } from '@/pages/ErrorFallback/ErrorFallback';
 import { ThemeModeProvider } from './ThemeModeProvider';
 
@@ -18,14 +17,12 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     return (
         <React.Suspense fallback={<PageSpinner />}>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <AuthProvider>
-                    <BrowserRouter>
-                        <ThemeModeProvider>
-                            <CssBaseline />
-                            {children}
-                        </ThemeModeProvider>
-                    </BrowserRouter>
-                </AuthProvider>
+                <BrowserRouter>
+                    <ThemeModeProvider>
+                        <CssBaseline />
+                        {children}
+                    </ThemeModeProvider>
+                </BrowserRouter>
             </ErrorBoundary>
         </React.Suspense>
     );

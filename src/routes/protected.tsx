@@ -2,8 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { ProtectedRoute } from '@/components/Routing/ProtectedRoute';
 import { lazily } from 'react-lazily';
 
-// const { AgentsPage } = lazily(() => import('@/pages/Agents/Agents'));
-// const { AdminDashboard } = lazily(() => import('@/pages/Admin/Dashboard'));
+const { Articles: AdminArticles } = lazily(() => import('@/features/admins/pages/Articles'));
 
 export const protectedRoutes = () => [
     {
@@ -22,8 +21,8 @@ export const protectedRoutes = () => [
             </ProtectedRoute>
         ),
         children: [
-            { index: true, element: <div>Admin Dashboard</div> },
-            { path: 'articles', element: <div>Articles Management</div> },
+            // { index: true, element: <div>Admin Dashboard</div> },
+            { path: 'articles', element: <AdminArticles /> },
             { path: 'topics', element: <div>Topics Management</div> },
             { path: 'categories', element: <div>Categories Management</div> },
             { path: 'tags', element: <div>Tags Management</div> },
