@@ -7,7 +7,6 @@ export const useTopicsTable = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
 
-    // 1. Initial State for the .NET API request
     const [query, setQuery] = useState<TopicListRequest>({
         pageNumber: 1,
         pageSize: 25,
@@ -15,7 +14,6 @@ export const useTopicsTable = () => {
         isAscending: false,
     });
 
-    // 2. The Fetcher Function
     const fetchTopics = useCallback(async () => {
         setIsLoading(true);
         try {
@@ -23,19 +21,16 @@ export const useTopicsTable = () => {
             setTopics(result.data);
             setTotalCount(result.totalCount);
         } catch (error) {
-            // In a real app, you might trigger a global notification/toast here
             console.error('Failed to fetch topics:', error);
         } finally {
             setIsLoading(false);
         }
     }, [query]);
 
-    // 3. Re-run whenever the query object changes
     useEffect(() => {
         fetchTopics();
     }, [fetchTopics]);
 
-    // 4. Update helpers to keep the UI components "dumb"
     const updateQuery = (updates: Partial<TopicListRequest>) => {
         setQuery((prev) => ({
             ...prev,

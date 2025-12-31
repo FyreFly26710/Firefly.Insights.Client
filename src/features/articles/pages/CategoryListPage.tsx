@@ -10,7 +10,7 @@ export const CategoryListPage = () => {
     const data = use(categoriesPromise);
 
     const filteredCategories = useMemo(() => {
-        return (data ?? []).filter(cat => cat.categoryId !== 0);
+        return (data ?? []).filter(cat => cat.categoryId !== -1);
     }, [data]);
 
     return (

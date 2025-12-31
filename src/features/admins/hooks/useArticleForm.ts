@@ -4,8 +4,10 @@ import {
     apiArticlesGetById,
     apiArticlesCreate,
     apiArticlesUpdate,
+    apiTopicsGetLookupList,
 } from '@/features/articles/api';
 import type { ArticleCreateRequest, ArticleUpdateRequest } from '@/features/articles/api-types';
+import type { LookupItemDto } from '@/features/shared/types';
 
 interface UseArticleFormProps {
     articleId?: number | null;
@@ -15,6 +17,10 @@ interface UseArticleFormProps {
 export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Topics lookup list state
+    const [topics, setTopics] = useState<LookupItemDto[]>([]);
+    const [isLoadingTopics, setIsLoadingTopics] = useState(false);
 
     // 1. Initialize React Hook Form
     const form = useForm<ArticleCreateRequest>({
@@ -33,7 +39,23 @@ export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) =>
 
     const { reset, handleSubmit } = form;
 
-    // 2. Fetch data if in Edit Mode
+    // 2. Fetch topics lookup list on mount
+    useEffect(() => {
+        const fetchTopics = async () => {
+            setIsLoadingTopics(true);
+            try {
+                const topicsList = await apiTopicsGetLookupList();
+                setTopics(topicsList);
+            } catch (error) {
+                console.error('Failed to fetch topics:', error);
+            } finally {
+                setIsLoadingTopics(false);
+            }
+        };
+        fetchTopics();
+    }, []);
+
+    // 3. Fetch data if in Edit Mode
     useEffect(() => {
         if (articleId) {
             const fetchDetail = async () => {
@@ -75,7 +97,7 @@ export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) =>
         }
     }, [articleId, reset]);
 
-    // 3. Handle Submission
+    // 4. Handle Submission
     const onSubmit = async (values: ArticleCreateRequest) => {
         setIsSubmitting(true);
         try {
@@ -103,6 +125,8 @@ export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) =>
         onSubmit: handleSubmit(onSubmit),
         isLoading, // Initial loading for edit mode
         isSubmitting, // Submission loading
-        isEdit: !!articleId
+        isEdit: !!articleId,
+        topics, // Topics lookup list
+        isLoadingTopics, // Topics loading state
     };
 };

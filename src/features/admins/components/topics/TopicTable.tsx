@@ -120,6 +120,9 @@ export const TopicTable: React.FC<TopicTableProps> = ({
             });
         }
     };
+    const handleRowDoubleClick = (params: { row: TopicDto }) => {
+        onEdit(params.row.topicId);
+    };
 
     return (
         <Paper id="topic-table" sx={{ width: '100%', height: '100%', minHeight: 400 }}>
@@ -141,6 +144,7 @@ export const TopicTable: React.FC<TopicTableProps> = ({
                 }}
                 onPaginationModelChange={handlePaginationModelChange}
                 onSortModelChange={handleSortModelChange}
+                onRowDoubleClick={handleRowDoubleClick}
 
                 // Style & Polish
                 pageSizeOptions={[10, 25, 50]}

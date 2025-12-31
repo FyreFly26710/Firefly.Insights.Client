@@ -12,6 +12,7 @@ interface UpsertDrawerProps {
     formId: string;
     children: React.ReactNode;
     submitLabel: string;
+    width?: number | string;
 }
 
 export const UpsertDrawer: React.FC<UpsertDrawerProps> = ({
@@ -22,7 +23,8 @@ export const UpsertDrawer: React.FC<UpsertDrawerProps> = ({
     isSubmitting,
     formId,
     children,
-    submitLabel
+    submitLabel,
+    width = '40%'
 }) => {
     return (
         <Drawer
@@ -30,7 +32,7 @@ export const UpsertDrawer: React.FC<UpsertDrawerProps> = ({
             anchor="right"
             open={open}
             onClose={onClose}
-            slotProps={{ paper: { sx: { width: { xs: '100%', sm: 560 } } } }}
+            slotProps={{ paper: { sx: { width: { xs: '100%', sm: width } } } }}
         >
             <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 {/* Header */}

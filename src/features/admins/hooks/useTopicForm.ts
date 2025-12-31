@@ -4,8 +4,10 @@ import {
     apiTopicsGetById,
     apiTopicsCreate,
     apiTopicsUpdate,
+    apiCategoriesGetLookupList,
 } from '@/features/articles/api';
 import type { TopicCreateRequest, TopicUpdateRequest } from '@/features/articles/api-types';
+import type { LookupItemDto } from '@/features/shared/types';
 
 interface UseTopicFormProps {
     topicId?: number | null;
@@ -16,9 +18,14 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Categories lookup list state
+    const [categories, setCategories] = useState<LookupItemDto[]>([]);
+    const [isLoadingCategories, setIsLoadingCategories] = useState(false);
+
     // 1. Initialize React Hook Form
-    const form = useForm<TopicCreateRequest>({
+    const form = useForm<TopicUpdateRequest>({
         defaultValues: {
+            topicId: topicId ?? 0,
             name: '',
             description: '',
             categoryId: undefined,
@@ -30,7 +37,23 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
 
     const { reset, handleSubmit } = form;
 
-    // 2. Fetch data if in Edit Mode
+    // 2. Fetch categories lookup list on mount
+    useEffect(() => {
+        const fetchCategories = async () => {
+            setIsLoadingCategories(true);
+            try {
+                const categoriesList = await apiCategoriesGetLookupList();
+                setCategories(categoriesList);
+            } catch (error) {
+                console.error('Failed to fetch categories:', error);
+            } finally {
+                setIsLoadingCategories(false);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    // 3. Fetch data if in Edit Mode
     useEffect(() => {
         if (topicId) {
             const fetchDetail = async () => {
@@ -45,6 +68,7 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
                         imageUrl: data.imageUrl,
                         sortNumber: data.sortNumber,
                         isHidden: data.isHidden,
+                        topicArticles: data.topicArticles,
                     });
                 } catch (error) {
                     console.error("Failed to load topic details", error);
@@ -56,30 +80,36 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
         } else {
             // Reset to defaults if creating new
             reset({
+                topicId: 0,
                 name: '',
                 description: '',
                 categoryId: undefined,
                 imageUrl: '',
                 sortNumber: 0,
                 isHidden: false,
+                topicArticles: [],
             });
         }
     }, [topicId, reset]);
 
-    // 3. Handle Submission
-    const onSubmit = async (values: TopicCreateRequest) => {
+    // 4. Handle Submission
+    const onSubmit = async (values: TopicUpdateRequest) => {
         setIsSubmitting(true);
         try {
             if (topicId) {
-                // Update Mode: Construct TopicUpdateRequest
-                const updateRequest: TopicUpdateRequest = {
-                    topicId,
-                    ...values,
-                };
-                await apiTopicsUpdate(topicId, updateRequest);
+                // Update Mode
+                await apiTopicsUpdate(topicId, values);
             } else {
                 // Create Mode
-                await apiTopicsCreate(values);
+                const createRequest: TopicCreateRequest = {
+                    name: values.name ?? '',
+                    categoryId: values.categoryId ?? 0,
+                    description: values.description ?? '',
+                    imageUrl: values.imageUrl ?? '',
+                    sortNumber: values.sortNumber ?? 0,
+                    isHidden: values.isHidden ?? false,
+                }
+                await apiTopicsCreate(createRequest);
             }
             onSuccess();
         } catch (error) {
@@ -92,8 +122,10 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
     return {
         form,
         onSubmit: handleSubmit(onSubmit),
-        isLoading, // Initial loading for edit mode
-        isSubmitting, // Submission loading
-        isEdit: !!topicId
+        isLoading,
+        isSubmitting,
+        isEdit: !!topicId,
+        categories,
+        isLoadingCategories,
     };
 };

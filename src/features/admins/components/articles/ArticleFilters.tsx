@@ -8,6 +8,7 @@ import {
 import type { ArticleListRequest } from '@/features/articles/api-types';
 import { SearchFilter } from '../common/SearchFilter';
 import { VisibilityFilter } from '../common/VisibilityFilter';
+import { useArticleFilter } from '../../hooks/useArticleFilter';
 
 interface ArticleFiltersProps {
     query: ArticleListRequest;
@@ -20,6 +21,10 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
 }) => {
     // Local state for the search text to handle debouncing
     const [searchTerm, setSearchTerm] = useState(query.articleTitle || '');
+
+    // Topics lookup list state
+    const { topics, isLoading } = useArticleFilter();
+
 
     // 1. Debounce Logic: Only trigger API call after user stops typing for 500ms
     useEffect(() => {
@@ -55,6 +60,29 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
                     isHidden={query.isHidden}
                     onFilterChange={(isHidden) => onFilterChange({ isHidden })}
                 />
+
+                {/* Topic Filter */}
+                <TextField
+                    select
+                    label="Topic"
+                    size="small"
+                    value={query.topicId === undefined ? 'all' : query.topicId.toString()}
+                    onChange={(e) => {
+                        const val = e.target.value;
+                        onFilterChange({
+                            topicId: val === 'all' ? undefined : Number(val)
+                        });
+                    }}
+                    disabled={isLoading}
+                    sx={{ minWidth: 180 }}
+                >
+                    <MenuItem value="all">All Topics</MenuItem>
+                    {topics.map((topic) => (
+                        <MenuItem key={topic.id} value={topic.id.toString()}>
+                            {topic.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
 
                 {/* Topic Type Filter */}
                 <TextField

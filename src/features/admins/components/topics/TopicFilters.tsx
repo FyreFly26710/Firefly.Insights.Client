@@ -6,6 +6,7 @@ import {
     Stack,
 } from '@mui/material';
 import type { TopicListRequest } from '@/features/articles/api-types';
+import { useTopicFilter } from '../../hooks/useTopicFilter';
 import { SearchFilter } from '../common/SearchFilter';
 import { VisibilityFilter } from '../common/VisibilityFilter';
 
@@ -21,7 +22,10 @@ export const TopicFilters: React.FC<TopicFiltersProps> = ({
     // Local state for the search text to handle debouncing
     const [searchTerm, setSearchTerm] = useState(query.topicName || '');
 
-    // 1. Debounce Logic: Only trigger API call after user stops typing for 500ms
+    // Categories lookup list from hook
+    const { categories, isLoading } = useTopicFilter();
+
+    // Debounce Logic: Only trigger API call after user stops typing for 500ms
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             if (searchTerm !== query.topicName) {
@@ -30,9 +34,9 @@ export const TopicFilters: React.FC<TopicFiltersProps> = ({
         }, 500);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [searchTerm]);
+    }, [searchTerm, query.topicName, onFilterChange]);
 
-    // 2. Clear Search Helper
+    // Clear Search Helper
     const handleClearSearch = () => {
         setSearchTerm('');
         onFilterChange({ topicName: '' });
@@ -49,6 +53,29 @@ export const TopicFilters: React.FC<TopicFiltersProps> = ({
                     setSearchTerm={setSearchTerm}
                     handleClearSearch={handleClearSearch}
                 />
+
+                {/* Category Filter */}
+                <TextField
+                    select
+                    label="Category"
+                    size="small"
+                    value={query.categoryId === undefined ? 'all' : query.categoryId.toString()}
+                    onChange={(e) => {
+                        const val = e.target.value;
+                        onFilterChange({
+                            categoryId: val === 'all' ? undefined : Number(val)
+                        });
+                    }}
+                    disabled={isLoading}
+                    sx={{ minWidth: 180 }}
+                >
+                    <MenuItem value="all">All Categories</MenuItem>
+                    {categories.map((category) => (
+                        <MenuItem key={category.id} value={category.id.toString()}>
+                            {category.name}
+                        </MenuItem>
+                    ))}
+                </TextField>
 
                 {/* Visibility Filter */}
                 <VisibilityFilter

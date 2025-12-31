@@ -1,5 +1,6 @@
 import { axiosClient } from '@/features/shared/utils/axiosClient';
 import type { TopicDto, PagedTopicDto, TopicListRequest, TopicCreateRequest, TopicUpdateRequest } from '../api-types';
+import type { LookupItemDto } from '@/features/shared/types';
 
 export const apiTopicsGetList = async (request: TopicListRequest) => {
     const response = await axiosClient.get(`/contents/topics`, {
@@ -12,6 +13,10 @@ export const apiTopicsGetList = async (request: TopicListRequest) => {
 export const apiTopicsGetById = async (topicId: number) => {
     const response = await axiosClient.get(`/contents/topics/${topicId}`);
     return response.data as TopicDto;
+}
+export const apiTopicsGetLookupList = async () => {
+    const response = await axiosClient.get(`/contents/topics/lookup-list`);
+    return response.data as LookupItemDto[];
 }
 export const apiTopicsCreate = async (request: TopicCreateRequest) => {
     const response = await axiosClient.post(`/contents/topics`, request);

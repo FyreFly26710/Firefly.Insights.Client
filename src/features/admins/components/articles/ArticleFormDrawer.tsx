@@ -4,11 +4,13 @@ import {
     TextField,
     FormControlLabel,
     Checkbox,
-    Grid
+    Grid,
+    MenuItem
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { useArticleForm } from '../../hooks/useArticleForm';
 import { UpsertDrawer } from '../common/UpsertDrawer';
+import Flex from '@/components/Elements/Flex/Flex';
 
 interface ArticleFormDrawerProps {
     open: boolean;
@@ -23,7 +25,7 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
     onClose,
     onSuccess
 }) => {
-    const { form, onSubmit, isLoading, isSubmitting, isEdit } = useArticleForm({
+    const { form, onSubmit, isLoading, isSubmitting, isEdit, topics, isLoadingTopics } = useArticleForm({
         articleId: articleId,
         onSuccess
     });
@@ -39,6 +41,7 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
             isSubmitting={isSubmitting}
             formId="article-form"
             submitLabel={isEdit ? 'Update Article' : 'Create Article'}
+            width={560}
         >
             <Stack spacing={3} component="form" id="article-form" onSubmit={onSubmit}>
 
@@ -50,12 +53,31 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
                     helperText={errors.title?.message}
                 />
 
-                <TextField
-                    label="Topic ID"
-                    fullWidth
-                    {...register('topicId', { required: 'Topic is required' })}
-                    error={!!errors.topicId}
-                    helperText={errors.topicId?.message}
+                <Controller
+                    name="topicId"
+                    control={control}
+                    rules={{ required: 'Topic is required' }}
+                    render={({ field }) => (
+                        <TextField
+                            {...field}
+                            select
+                            label="Topic"
+                            fullWidth
+                            disabled={isLoadingTopics}
+                            error={!!errors.topicId}
+                            helperText={errors.topicId?.message}
+                            value={field.value || ''}
+                        >
+                            <MenuItem value="">
+                                <em>Select a topic</em>
+                            </MenuItem>
+                            {topics.map((topic) => (
+                                <MenuItem key={topic.id} value={topic.id.toString()}>
+                                    {topic.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    )}
                 />
 
                 <TextField
@@ -83,28 +105,23 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
                     helperText={errors.content?.message}
                 />
 
-                <Grid container spacing={2}>
-                    <Grid size={6}>
-                        <TextField
-                            label="Sort Order"
-                            type="number"
-                            fullWidth
-                            {...register('sortNumber', { valueAsNumber: true })}
-                        />
-                    </Grid>
-                    <Grid size={6} sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Controller
-                            name="isHidden"
-                            control={control}
-                            render={({ field }) => (
-                                <FormControlLabel
-                                    control={<Checkbox {...field} checked={!!field.value} />}
-                                    label="Hide Article"
-                                />
-                            )}
-                        />
-                    </Grid>
-                </Grid>
+                <Flex direction="row" gap={24}>
+                    <TextField
+                        label="Sort Order"
+                        type="number"
+                        {...register('sortNumber', { valueAsNumber: true })}
+                    />
+                    <Controller
+                        name="isHidden"
+                        control={control}
+                        render={({ field }) => (
+                            <FormControlLabel
+                                control={<Checkbox {...field} checked={!!field.value} />}
+                                label="Hide Article"
+                            />
+                        )}
+                    />
+                </Flex>
 
                 <Controller
                     name="isTopicSummary"

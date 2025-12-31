@@ -23,11 +23,11 @@ export type TopicDto = {
 export type TopicArticleDto = {
     articleId: number;
     title: string;
-    description: string;
-    imageUrl: string;
+    // description: string;
+    // imageUrl: string;
     sortNumber: number;
     isHidden: boolean;
-    tags: string[];
+    // tags: string[];
     isTopicSummary: boolean;
 }
 export type PagedTopicDto = {
@@ -50,4 +50,12 @@ export type TopicCreateRequest = TopicBase;
 
 export type TopicUpdateRequest = Partial<TopicBase> & {
     topicId: number;
-};
+    topicArticles?: TopicUpdateRequestArticle[];
+
+}; export type TopicUpdateRequestArticle = {
+    articleId: number;
+    title: string;
+    sortNumber: number;
+    isHidden: boolean;
+    isTopicSummary: boolean;
+}

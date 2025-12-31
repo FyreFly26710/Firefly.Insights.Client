@@ -122,6 +122,10 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
         }
     };
 
+    const handleRowDoubleClick = (params: { row: ArticleDto }) => {
+        onEdit(params.row.articleId);
+    };
+
     return (
         <Paper id="article-table" sx={{ width: '100%', height: '100%', minHeight: 400 }}>
             <DataGrid
@@ -142,6 +146,7 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
                 }}
                 onPaginationModelChange={handlePaginationModelChange}
                 onSortModelChange={handleSortModelChange}
+                onRowDoubleClick={handleRowDoubleClick}
 
                 // Style & Polish
                 pageSizeOptions={[10, 25, 50]}
