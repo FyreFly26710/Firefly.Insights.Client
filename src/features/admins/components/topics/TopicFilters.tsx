@@ -39,7 +39,7 @@ export const TopicFilters: React.FC<TopicFiltersProps> = ({
     };
 
     return (
-        <Paper variant="outlined" sx={{ p: 2, mb: 3, bgcolor: 'background.paper' }}>
+        <Paper id="topic-filters" variant="outlined" sx={{ p: 2, mb: 3, bgcolor: 'background.paper' }}>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
 
                 {/* Title Search */}

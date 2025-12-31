@@ -11,7 +11,7 @@ interface TableActionsProps {
 
 export const TableActions: React.FC<TableActionsProps> = ({ id, onEdit, onDelete }) => {
     return (
-        <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ width: '100%' }}>
+        <Stack id="table-actions" direction="row" spacing={1} justifyContent="flex-end" sx={{ width: '100%' }}>
             <Tooltip title="Edit">
                 <IconButton size="small" color="primary" onClick={() => onEdit(id)}>
                     <EditIcon fontSize="small" />

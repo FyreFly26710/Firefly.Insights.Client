@@ -39,6 +39,7 @@ export const DeleteDialog: React.FC<DeleteDialogProps> = ({
 
   return (
     <Dialog
+      id="delete-dialog"
       open={open}
       onClose={isLoading ? undefined : onClose}
       slotProps={{

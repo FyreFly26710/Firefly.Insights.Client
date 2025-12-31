@@ -9,8 +9,8 @@ interface UpsertDrawerProps {
     title: string;
     isLoading?: boolean;
     isSubmitting?: boolean;
-    formId: string; // To link the footer button to the internal form
-    children: React.ReactNode; // The "Body" (your text fields)
+    formId: string;
+    children: React.ReactNode;
     submitLabel: string;
 }
 
@@ -26,6 +26,7 @@ export const UpsertDrawer: React.FC<UpsertDrawerProps> = ({
 }) => {
     return (
         <Drawer
+            id="upsert-drawer"
             anchor="right"
             open={open}
             onClose={onClose}

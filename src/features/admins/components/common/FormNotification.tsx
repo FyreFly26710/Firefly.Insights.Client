@@ -9,6 +9,7 @@ interface FormNotificationProps {
 
 export const FormNotification: React.FC<FormNotificationProps> = ({ open, message, severity, onClose }) => (
     <Snackbar
+        id="form-notification"
         open={open}
         autoHideDuration={4000}
         onClose={onClose}

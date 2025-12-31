@@ -80,7 +80,7 @@ export const Topics = () => {
     };
 
     return (
-        <Container maxWidth="xl" sx={{ py: 4 }}>
+        <Container id="topics-page" component="main" maxWidth="xl" sx={{ py: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
             <AdminPageHeader
                 title="Topics"
                 action={

@@ -123,7 +123,7 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
     };
 
     return (
-        <Paper sx={{ width: '100%', height: 'calc(100vh - 300px)', minHeight: 400 }}>
+        <Paper id="article-table" sx={{ width: '100%', height: '100%', minHeight: 400 }}>
             <DataGrid
                 rows={articles}
                 columns={columns}

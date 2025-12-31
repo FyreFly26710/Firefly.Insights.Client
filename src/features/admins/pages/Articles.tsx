@@ -79,7 +79,7 @@ export const Articles = () => {
     };
 
     return (
-        <Container maxWidth="xl" sx={{ py: 4 }}>
+        <Container id="articles-page" component="main" maxWidth="xl" sx={{ py: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
             <AdminPageHeader
                 title="Articles"
                 action={

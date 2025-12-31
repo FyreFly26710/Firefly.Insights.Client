@@ -14,6 +14,7 @@ interface SearchFilterProps {
 export const SearchFilter: React.FC<SearchFilterProps> = ({ label, searchTerm, setSearchTerm, handleClearSearch }) => {
     return (
         <TextField
+            id="search-filter"
             label={label}
             size="small"
             placeholder="Type to search..."

@@ -3,11 +3,11 @@ import { useParams, Outlet } from "react-router-dom";
 import Flex from "@/components/Elements/Flex/Flex";
 import { useAsync } from "@/features/shared/hooks/useAsync ";
 import { apiTopicsGetById } from "@/features/articles/api";
-import type { SidebarArticle } from "@/features/articles/api-types";
 import { TopicSidebar } from "@/features/articles/components/TopicSidebar";
 import { PageSpinner } from "@/components/Elements/Spinner/PageSpinner";
 import { ErrorPageLayout } from "./ErrorPageLayout";
 import { Container } from "@mui/material";
+import type { SidebarArticle } from "@/features/articles/types";
 
 export const ArticleLayout = () => {
     const { topicId } = useParams();

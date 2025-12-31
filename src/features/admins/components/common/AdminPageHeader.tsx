@@ -7,7 +7,7 @@ interface AdminPageHeaderProps {
 
 export const AdminPageHeader = ({ title, action }: AdminPageHeaderProps) => {
     return (
-        <Stack
+        <Stack id="admin-page-header"
             direction="row"
             justifyContent="space-between"
             alignItems="center"

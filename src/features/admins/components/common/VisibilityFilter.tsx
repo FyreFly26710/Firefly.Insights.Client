@@ -8,6 +8,7 @@ interface VisibilityFilterProps {
 export const VisibilityFilter: React.FC<VisibilityFilterProps> = ({ isHidden, onFilterChange }) => {
     return (
         <TextField
+            id="visibility-filter"
             select
             label="Status"
             size="small"
