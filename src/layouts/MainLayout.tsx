@@ -1,4 +1,4 @@
-import { Header } from "@/components/Header/Header";
+import { Header } from "@/components/Header/AppHeader";
 import { Box } from "@mui/material";
 import React from "react";
 type MainLayoutProps = {

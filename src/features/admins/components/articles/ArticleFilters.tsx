@@ -4,12 +4,10 @@ import {
     TextField,
     MenuItem,
     Stack,
-    InputAdornment,
-    IconButton,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
 import type { ArticleListRequest } from '@/features/articles/api-types';
+import { SearchFilter } from '../common/SearchFilter';
+import { VisibilityFilter } from '../common/VisibilityFilter';
 
 interface ArticleFiltersProps {
     query: ArticleListRequest;
@@ -45,49 +43,20 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
 
                 {/* Title Search */}
-                <TextField
+                <SearchFilter
                     label="Search Articles"
-                    size="small"
-                    placeholder="Type to search..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    sx={{ flexGrow: 1 }}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <SearchIcon color="action" fontSize="small" />
-                            </InputAdornment>
-                        ),
-                        endAdornment: searchTerm && (
-                            <InputAdornment position="end">
-                                <IconButton size="small" onClick={handleClearSearch}>
-                                    <ClearIcon fontSize="small" />
-                                </IconButton>
-                            </InputAdornment>
-                        )
-                    }}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    handleClearSearch={handleClearSearch}
                 />
 
                 {/* Visibility Filter */}
-                <TextField
-                    select
-                    label="Status"
-                    size="small"
-                    value={query.isHidden === undefined ? 'all' : query.isHidden.toString()}
-                    onChange={(e) => {
-                        const val = e.target.value;
-                        onFilterChange({
-                            isHidden: val === 'all' ? undefined : val === 'true'
-                        });
-                    }}
-                    sx={{ minWidth: 150 }}
-                >
-                    <MenuItem value="all">All Status</MenuItem>
-                    <MenuItem value="false">Visible Only</MenuItem>
-                    <MenuItem value="true">Hidden Only</MenuItem>
-                </TextField>
+                <VisibilityFilter
+                    isHidden={query.isHidden}
+                    onFilterChange={(isHidden) => onFilterChange({ isHidden })}
+                />
 
-                {/* Topic Summary Filter */}
+                {/* Topic Type Filter */}
                 <TextField
                     select
                     label="Topic Type"

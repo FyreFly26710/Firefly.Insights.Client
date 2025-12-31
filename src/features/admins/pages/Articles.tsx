@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Stack, Container, Alert, Snackbar } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 // Internal Imports
 import { useArticlesTable } from '../hooks/useArticlesTable';
-import { ArticleTable } from '../components/ArticleTable';
-import { ArticleFilters } from '../components/ArticleFilters';
-import { ArticleFormDrawer } from '../components/ArticleFormDrawer';
-import { ArticleDeleteDialog } from '../components/ArticleDeleteDialog'; 
-import type { ArticleDto } from '@/features/articles/api-types';
+import { ArticleTable } from '../components/articles/ArticleTable';
+import { ArticleFilters } from '../components/articles/ArticleFilters';
+import { ArticleFormDrawer } from '../components/articles/ArticleFormDrawer';
+import { FormNotification } from '../components/common/FormNotification';
+import { DeleteDialog } from '../components/common/DeleteDialog';
 import { apiArticlesDelete } from '@/features/articles/api';
+import { AdminPageHeader } from '../components/common/AdminPageHeader';
 
 export const Articles = () => {
-    // 1. Data Engine Hook (Handles API fetch, pagination, sorting, filtering)
+    // Data Engine Hook (Handles API fetch, pagination, sorting, filtering)
     const {
         articles,
         totalCount,
@@ -22,14 +23,12 @@ export const Articles = () => {
         refresh
     } = useArticlesTable();
 
-    // 2. UI State for Dialogs and Drawers
-    const [selectedArticle, setSelectedArticle] = useState<ArticleDto | null>(null);
+    // UI State for Dialogs and Drawers
+    const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
 
     // Delete Dialog State
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [articleToDelete, setArticleToDelete] = useState<{ id: number; title: string } | null>(null);
-    const [isDeleting, setIsDeleting] = useState(false);
 
     // Notification State
     const [notification, setNotification] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
@@ -38,86 +37,69 @@ export const Articles = () => {
         severity: 'success',
     });
 
-    // 3. Action Handlers
-
-    // --- Create/Edit ---
+    // Action Handlers
     const handleCreate = () => {
-        setSelectedArticle(null);
+        setSelectedArticleId(null);
         setIsFormOpen(true);
     };
 
-    const handleEdit = (article: ArticleDto) => {
-        setSelectedArticle(article);
+    const handleEdit = (articleId: number) => {
+        setSelectedArticleId(articleId);
         setIsFormOpen(true);
     };
 
     const handleFormSuccess = () => {
         setIsFormOpen(false);
-        setNotification({ open: true, message: 'Article saved successfully', severity: 'success' });
-        refresh(); // Reload table data
+        notify('Article saved successfully');
+        refresh();
     };
 
-    // --- Delete ---
     const handleDeleteClick = (id: number) => {
         const article = articles.find(a => a.articleId === id);
         if (article) {
             setArticleToDelete({ id: article.articleId, title: article.title });
-            setDeleteDialogOpen(true);
         }
     };
-
-    const handleConfirmDelete = async () => {
+    const handleDeleteConfirm = async () => {
         if (!articleToDelete) return;
 
-        setIsDeleting(true);
         try {
             await apiArticlesDelete(articleToDelete.id);
-            setNotification({
-                open: true,
-                message: 'Article deleted successfully',
-                severity: 'success'
-            });
-            setDeleteDialogOpen(false);
-            refresh(); // Reload table data
+            notify('Article deleted successfully', 'success');
+            refresh();
         } catch (error) {
-            setNotification({
-                open: true,
-                message: 'Failed to delete article',
-                severity: 'error'
-            });
+            notify('Failed to delete article', 'error');
         } finally {
-            setIsDeleting(false);
             setArticleToDelete(null);
         }
     };
 
+    const notify = (message: string, severity: 'success' | 'error' = 'success') => {
+        setNotification({ open: true, message, severity });
+    };
+
     return (
         <Container maxWidth="xl" sx={{ py: 4 }}>
-            {/* Header Section */}
-            <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
-                <Box>
-                    <Typography variant="h4" fontWeight={800} color="text.primary">
-                        Articles
-                    </Typography>
-                </Box>
-                <Button
-                    variant="contained"
-                    size="large"
-                    startIcon={<AddIcon />}
-                    onClick={handleCreate}
-                    sx={{ borderRadius: 2, textTransform: 'none', px: 3 }}
-                >
-                    New Article
-                </Button>
-            </Stack>
+            <AdminPageHeader
+                title="Articles"
+                action={
+                    <Button
+                        variant="contained"
+                        size="large"
+                        startIcon={<AddIcon />}
+                        onClick={handleCreate}
+                        sx={{ borderRadius: 2, textTransform: 'none', px: 3 }}
+                    >
+                        New Article
+                    </Button>
+                }
+            />
 
-            {/* 1. Filtering UI */}
             <ArticleFilters
                 query={query}
                 onFilterChange={updateQuery}
             />
 
-            {/* 2. Data Table UI */}
             <ArticleTable
                 articles={articles}
                 totalCount={totalCount}
@@ -128,39 +110,25 @@ export const Articles = () => {
                 onDelete={handleDeleteClick}
             />
 
-            {/* 3. Sliding Form Drawer (Create/Edit) */}
             <ArticleFormDrawer
                 open={isFormOpen}
-                article={selectedArticle}
+                articleId={selectedArticleId}
                 onClose={() => setIsFormOpen(false)}
                 onSuccess={handleFormSuccess}
             />
 
-            {/* 4. Confirmation Dialog (Delete) */}
-            <ArticleDeleteDialog
-                open={deleteDialogOpen}
+            <DeleteDialog
+                open={Boolean(articleToDelete)}
                 title={articleToDelete?.title || ''}
-                isLoading={isDeleting}
-                onClose={() => setDeleteDialogOpen(false)}
-                onConfirm={handleConfirmDelete}
+                entityLabel="Article"
+                onClose={() => setArticleToDelete(null)}
+                onConfirmFn={handleDeleteConfirm}
             />
 
-            {/* 5. Feedback Notifications */}
-            <Snackbar
-                open={notification.open}
-                autoHideDuration={4000}
-                onClose={() => setNotification({ ...notification, open: false })}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            >
-                <Alert
-                    onClose={() => setNotification({ ...notification, open: false })}
-                    severity={notification.severity}
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {notification.message}
-                </Alert>
-            </Snackbar>
+            <FormNotification
+                {...notification}
+                onClose={() => setNotification(prev => ({ ...prev, open: false }))}
+            />
         </Container>
     );
 };

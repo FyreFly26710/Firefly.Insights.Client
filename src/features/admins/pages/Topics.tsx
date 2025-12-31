@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
-import { Box, Typography, Button, Stack, Container, Alert, Snackbar } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 // Internal Imports
-import { TopicTable } from '../components/TopicTable';
-import { TopicFormDrawer } from '../components/TopicFormDrawer';
-import { TopicDeleteDialog } from '../components/TopicDeleteDialog';
-import type { TopicDto } from '@/features/articles/api-types';
-import { apiTopicsDelete } from '@/features/articles/api';
 import { useTopicsTable } from '../hooks/useTopicsTable';
-import { TopicFilters } from '../components/TopicFilters';
+import { TopicTable } from '../components/topics/TopicTable';
+import { TopicFilters } from '../components/topics/TopicFilters';
+import { TopicFormDrawer } from '../components/topics/TopicFormDrawer';
+import { FormNotification } from '../components/common/FormNotification';
+import { DeleteDialog } from '../components/common/DeleteDialog';
+import { apiTopicsDelete } from '@/features/articles/api';
+import { AdminPageHeader } from '../components/common/AdminPageHeader';
 
 export const Topics = () => {
-    // 1. Data Engine Hook (Handles API fetch, pagination, sorting, filtering)
+    // Data Engine Hook (Handles API fetch, pagination, sorting, filtering)
     const {
         topics,
         totalCount,
@@ -22,14 +23,12 @@ export const Topics = () => {
         refresh
     } = useTopicsTable();
 
-    // 2. UI State for Dialogs and Drawers
-    const [selectedTopic, setSelectedTopic] = useState<TopicDto | null>(null);
+    // UI State for Dialogs and Drawers
+    const [selectedTopicId, setSelectedTopicId] = useState<number | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
 
     // Delete Dialog State
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [topicToDelete, setTopicToDelete] = useState<{ id: number; title: string } | null>(null);
-    const [isDeleting, setIsDeleting] = useState(false);
 
     // Notification State
     const [notification, setNotification] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
@@ -38,86 +37,70 @@ export const Topics = () => {
         severity: 'success',
     });
 
-    // 3. Action Handlers
-
-    // --- Create/Edit ---
+    // Action Handlers
     const handleCreate = () => {
-        setSelectedTopic(null);
+        setSelectedTopicId(null);
         setIsFormOpen(true);
     };
 
-    const handleEdit = (topic: TopicDto) => {
-        setSelectedTopic(topic);
+    const handleEdit = (topicId: number) => {
+        setSelectedTopicId(topicId);
         setIsFormOpen(true);
     };
 
     const handleFormSuccess = () => {
         setIsFormOpen(false);
-        setNotification({ open: true, message: 'Topic saved successfully', severity: 'success' });
-        refresh(); // Reload table data
+        notify('Topic saved successfully');
+        refresh();
     };
 
-    // --- Delete ---
     const handleDeleteClick = (id: number) => {
-        const topic = topics.find(a => a.topicId === id);
+        const topic = topics.find(t => t.topicId === id);
         if (topic) {
             setTopicToDelete({ id: topic.topicId, title: topic.name });
-            setDeleteDialogOpen(true);
         }
     };
 
-    const handleConfirmDelete = async () => {
+    const handleDeleteConfirm = async () => {
         if (!topicToDelete) return;
 
-        setIsDeleting(true);
         try {
             await apiTopicsDelete(topicToDelete.id);
-            setNotification({
-                open: true,
-                message: 'Topic deleted successfully',
-                severity: 'success'
-            });
-            setDeleteDialogOpen(false);
-            refresh(); // Reload table data
+            notify('Topic deleted successfully', 'success');
+            refresh();
         } catch (error) {
-            setNotification({
-                open: true,
-                message: 'Failed to delete topic',
-                severity: 'error'
-            });
+            notify('Failed to delete topic', 'error');
         } finally {
-            setIsDeleting(false);
             setTopicToDelete(null);
         }
     };
 
+    const notify = (message: string, severity: 'success' | 'error' = 'success') => {
+        setNotification({ open: true, message, severity });
+    };
+
     return (
         <Container maxWidth="xl" sx={{ py: 4 }}>
-            {/* Header Section */}
-            <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
-                <Box>
-                    <Typography variant="h4" fontWeight={800} color="text.primary">
-                        Topics
-                    </Typography>
-                </Box>
-                <Button
-                    variant="contained"
-                    size="large"
-                    startIcon={<AddIcon />}
-                    onClick={handleCreate}
-                    sx={{ borderRadius: 2, textTransform: 'none', px: 3 }}
-                >
-                    New Topic
-                </Button>
-            </Stack>
+            <AdminPageHeader
+                title="Topics"
+                action={
+                    <Button
+                        variant="contained"
+                        size="large"
+                        startIcon={<AddIcon />}
+                        onClick={handleCreate}
+                        sx={{ borderRadius: 2, textTransform: 'none', px: 3 }}
+                    >
+                        New Topic
+                    </Button>
+                }
+            />
 
-            {/* 1. Filtering UI */}
             <TopicFilters
                 query={query}
                 onFilterChange={updateQuery}
             />
 
-            {/* 2. Data Table UI */}
             <TopicTable
                 topics={topics}
                 totalCount={totalCount}
@@ -128,39 +111,25 @@ export const Topics = () => {
                 onDelete={handleDeleteClick}
             />
 
-            {/* 3. Sliding Form Drawer (Create/Edit) */}
             <TopicFormDrawer
                 open={isFormOpen}
-                topic={selectedTopic}
+                topicId={selectedTopicId}
                 onClose={() => setIsFormOpen(false)}
                 onSuccess={handleFormSuccess}
             />
 
-            {/* 4. Confirmation Dialog (Delete) */}
-            <TopicDeleteDialog
-                open={deleteDialogOpen}
+            <DeleteDialog
+                open={Boolean(topicToDelete)}
                 title={topicToDelete?.title || ''}
-                isLoading={isDeleting}
-                onClose={() => setDeleteDialogOpen(false)}
-                onConfirm={handleConfirmDelete}
+                entityLabel="Topic"
+                onClose={() => setTopicToDelete(null)}
+                onConfirmFn={handleDeleteConfirm}
             />
 
-            {/* 5. Feedback Notifications */}
-            <Snackbar
-                open={notification.open}
-                autoHideDuration={4000}
-                onClose={() => setNotification({ ...notification, open: false })}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            >
-                <Alert
-                    onClose={() => setNotification({ ...notification, open: false })}
-                    severity={notification.severity}
-                    variant="filled"
-                    sx={{ width: '100%' }}
-                >
-                    {notification.message}
-                </Alert>
-            </Snackbar>
+            <FormNotification
+                {...notification}
+                onClose={() => setNotification(prev => ({ ...prev, open: false }))}
+            />
         </Container>
     );
 };

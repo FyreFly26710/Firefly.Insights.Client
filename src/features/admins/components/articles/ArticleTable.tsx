@@ -1,10 +1,7 @@
 import React from 'react';
 import {
     Paper,
-    IconButton,
-    Stack,
     Chip,
-    Tooltip,
     Typography
 } from '@mui/material';
 import {
@@ -13,9 +10,8 @@ import {
     type GridPaginationModel,
     type GridSortModel
 } from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import type { ArticleDto, ArticleListRequest } from '@/features/articles/api-types';
+import { TableActions } from '../common/TableActions';
 
 interface ArticleTableProps {
     articles: ArticleDto[];
@@ -23,7 +19,7 @@ interface ArticleTableProps {
     isLoading: boolean;
     query: ArticleListRequest;
     onQueryChange: (updates: Partial<ArticleListRequest>) => void;
-    onEdit: (article: ArticleDto) => void;
+    onEdit: (articleId: number) => void;
     onDelete: (articleId: number) => void;
 }
 
@@ -100,18 +96,11 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
             align: 'right',
             headerAlign: 'right',
             renderCell: (params) => (
-                <Stack direction="row" spacing={1} justifyContent="flex-end">
-                    <Tooltip title="Edit">
-                        <IconButton size="small" color="primary" onClick={() => onEdit(params.row)}>
-                            <EditIcon fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                        <IconButton size="small" color="error" onClick={() => onDelete(params.row.articleId)}>
-                            <DeleteIcon fontSize="small" />
-                        </IconButton>
-                    </Tooltip>
-                </Stack>
+                <TableActions
+                    id={params.row.articleId}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                />
             ),
         },
     ];

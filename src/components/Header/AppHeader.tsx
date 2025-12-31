@@ -15,7 +15,7 @@ import styled from "@emotion/styled";
 import { useThemeMode } from "@/features/shared/hooks/useThemeMode";
 import Flex from "../Elements/Flex/Flex";
 import { UserHeaderAction } from "@/features/auth/components/UserHeaderAction";
-import { AdminMenu } from "@/features/admins/components/AdminMenu";
+import { AdminMenu } from "@/features/admins/components/common/AdminMenu";
 import { useUserStore } from "@/stores/useUserStore";
 
 const StyledHeader = styled("div")`
