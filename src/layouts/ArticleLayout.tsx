@@ -30,7 +30,6 @@ export const ArticleLayout = () => {
             .map((article) => ({
                 articleId: article.articleId,
                 title: article.title,
-                description: article.description,
             }));
     }, [data]);
     if (isLoading) {
@@ -46,7 +45,6 @@ export const ArticleLayout = () => {
             <TopicSidebar
                 topicId={data?.topicId ?? 0}
                 name={data?.name ?? ''}
-                description={data?.description ?? ''}
                 imageUrl={data?.imageUrl ?? ''}
                 topicArticles={topicArticles}
             />

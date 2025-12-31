@@ -3,7 +3,7 @@ import { Spinner } from "./Spinner";
 
 export const PageSpinner = () => {
     return (
-        <Flex id="page-spinner" height="80vh" justify="center" align="center">
+        <Flex id="page-spinner" height="80vh" width="100%" justify="center" align="center">
             <Spinner />
         </Flex>
     );

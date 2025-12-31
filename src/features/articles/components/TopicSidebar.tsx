@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 type TopicSidebarProps = {
     topicId: number;
     name: string;
-    description: string;
     imageUrl: string;
     topicArticles: SidebarArticle[];
 }
@@ -47,7 +46,7 @@ const HeaderImage = styled('img')({
     flexShrink: 0,
 });
 
-export const TopicSidebar = ({ topicId, name, description, imageUrl, topicArticles }: TopicSidebarProps) => {
+export const TopicSidebar = ({ topicId, name, imageUrl, topicArticles }: TopicSidebarProps) => {
     return (
         <SidebarContainer id="topic-sidebar" elevation={0}>
             <HeaderImage
@@ -56,7 +55,7 @@ export const TopicSidebar = ({ topicId, name, description, imageUrl, topicArticl
             />
 
             <Box sx={{ mt: 2, flexShrink: 0 }}>
-                <Typography variant="h5" component="h1" gutterBottom fontWeight="bold">
+                <Typography variant="h6" component="h2" gutterBottom fontWeight="bold">
                     {name}
                 </Typography>
             </Box>
@@ -70,24 +69,28 @@ export const TopicSidebar = ({ topicId, name, description, imageUrl, topicArticl
                         <ListItemButton
                             component={Link}
                             to={`/topics/${topicId}/articles/${article.articleId}`}
-                            sx={{ padding: 0 }}
+                            sx={{ p: 0 }}
                         >
                             <ListItemText
                                 primary={article.title}
-                                title={article.description}
+                                title={article.title}
                                 slotProps={{
                                     primary: {
                                         variant: 'subtitle2',
                                         color: 'primary.main',
+                                        noWrap: true,
                                         sx: {
+                                            minWidth: 0,
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
                                             cursor: 'pointer',
-                                            '&:hover': { textDecoration: 'underline' }
-                                        }
-                                    }
+                                            '&:hover': { textDecoration: 'underline' },
+                                        },
+                                    },
                                 }}
-
                             />
                         </ListItemButton>
+
                     </ListItem>
                 ))}
             </List>

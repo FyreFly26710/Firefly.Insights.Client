@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useAsync = <T, Args extends any[]>(
@@ -7,9 +7,21 @@ export const useAsync = <T, Args extends any[]>(
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<Error | null>(null);
+    const lastArgsRef = useRef<string>('');
 
     const execute = useCallback(async (...args: Args) => {
+        const argsKey = JSON.stringify(args);
+        const argsChanged = lastArgsRef.current !== argsKey;
+
         setIsLoading(true);
+        setError(null); // Clear previous errors
+
+        // Clear data only if arguments changed (different topicId)
+        if (argsChanged) {
+            setData(null);
+            lastArgsRef.current = argsKey;
+        }
+
         try {
             const result = await asyncFunction(...args);
             setData(result);
