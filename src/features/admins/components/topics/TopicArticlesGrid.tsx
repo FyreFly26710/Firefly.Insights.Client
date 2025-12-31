@@ -13,14 +13,14 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { Controller, useFieldArray, type Control, type UseFormRegister, type UseFormGetValues, type UseFormSetValue } from 'react-hook-form';
-import type { TopicCreateRequest } from '@/features/articles/api-types';
+import type { TopicUpdateRequest } from '@/features/articles/api-types';
 import Flex from '@/components/Elements/Flex/Flex';
 
 interface TopicArticlesGridProps {
-    control: Control<TopicCreateRequest>;
-    register: UseFormRegister<TopicCreateRequest>;
-    getValues: UseFormGetValues<TopicCreateRequest>;
-    setValue: UseFormSetValue<TopicCreateRequest>;
+    control: Control<TopicUpdateRequest>;
+    register: UseFormRegister<TopicUpdateRequest>;
+    getValues: UseFormGetValues<TopicUpdateRequest>;
+    setValue: UseFormSetValue<TopicUpdateRequest>;
 }
 
 export const TopicArticlesGrid: React.FC<TopicArticlesGridProps> = ({
@@ -63,19 +63,20 @@ export const TopicArticlesGrid: React.FC<TopicArticlesGridProps> = ({
 
         // Update sort numbers for all items
         const currentValues = getValues('topicArticles');
-        const reordered = [...currentValues];
-        const [movedItem] = reordered.splice(draggedIndex, 1);
-        reordered.splice(dropIndex, 0, movedItem);
+        if (currentValues) {
+            const reordered = [...currentValues];
+            const [movedItem] = reordered.splice(draggedIndex, 1);
+            reordered.splice(dropIndex, 0, movedItem);
 
-        // Update sort numbers
-        reordered.forEach((_, idx) => {
-            setValue(`topicArticles.${idx}.sortNumber`, idx);
-        });
+            // Update sort numbers
+            reordered.forEach((_, idx) => {
+                setValue(`topicArticles.${idx}.sortNumber`, idx);
+            });
 
-        setDraggedIndex(null);
-        setDragOverIndex(null);
-    };
-
+            setDraggedIndex(null);
+            setDragOverIndex(null);
+        };
+    }
     const handleDragEnd = () => {
         setDraggedIndex(null);
         setDragOverIndex(null);

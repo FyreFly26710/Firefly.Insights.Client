@@ -123,7 +123,7 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
                     />
                 </Flex>
 
-                <Controller
+                {/* <Controller
                     name="isTopicSummary"
                     control={control}
                     render={({ field }) => (
@@ -132,7 +132,7 @@ export const ArticleFormDrawer: React.FC<ArticleFormDrawerProps> = ({
                             label="Mark as Topic Summary"
                         />
                     )}
-                />
+                /> */}
             </Stack>
         </UpsertDrawer>
     );
