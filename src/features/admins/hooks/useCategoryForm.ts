@@ -7,7 +7,7 @@ import {
     apiTopicsGetLookupList,
 } from '@/features/articles/api';
 import type { CategoryCreateRequest, CategoryUpdateRequest } from '@/features/articles/api-types';
-import type { LookupItemDto } from '@/features/shared/types';
+import { useAsync } from '@/features/shared/hooks/useAsync ';
 
 interface UseCategoryFormProps {
     categoryId?: number | null;
@@ -15,14 +15,15 @@ interface UseCategoryFormProps {
 }
 
 export const useCategoryForm = ({ categoryId, onSuccess }: UseCategoryFormProps) => {
-    const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Topics lookup list state
-    const [topics, setTopics] = useState<LookupItemDto[]>([]);
-    const [isLoadingTopics, setIsLoadingTopics] = useState(false);
+    // Topics lookup list
+    const { data: topics, isLoading: isLoadingTopics, execute: fetchTopics } = useAsync(apiTopicsGetLookupList);
 
-    // 1. Initialize React Hook Form
+    // Category details
+    const { data: categoryData, isLoading, execute: fetchCategory } = useAsync(apiCategoriesGetById);
+
+    // Initialize React Hook Form
     const form = useForm<CategoryUpdateRequest>({
         defaultValues: {
             categoryId: categoryId ?? 0,
@@ -37,51 +38,15 @@ export const useCategoryForm = ({ categoryId, onSuccess }: UseCategoryFormProps)
 
     const { reset, handleSubmit } = form;
 
-    // 2. Fetch topics lookup list on mount
+    // Fetch topics lookup list on mount
     useEffect(() => {
-        const fetchTopics = async () => {
-            setIsLoadingTopics(true);
-            try {
-                const topicsList = await apiTopicsGetLookupList();
-                setTopics(topicsList);
-            } catch (error) {
-                console.error('Failed to fetch topics:', error);
-            } finally {
-                setIsLoadingTopics(false);
-            }
-        };
         fetchTopics();
-    }, []);
+    }, [fetchTopics]);
 
-    // 3. Fetch data if in Edit Mode
+    // Fetch data if in Edit Mode
     useEffect(() => {
         if (categoryId) {
-            const fetchDetail = async () => {
-                setIsLoading(true);
-                try {
-                    const data = await apiCategoriesGetById(categoryId);
-                    // Map DTO to Form Fields
-                    reset({
-                        categoryId: data.categoryId,
-                        name: data.name,
-                        description: data.description,
-                        imageUrl: data.imageUrl,
-                        sortNumber: data.sortNumber,
-                        isHidden: data.isHidden,
-                        topics: data.categoryTopics.map(topic => ({
-                            topicId: topic.topicId,
-                            name: topic.name,
-                            sortNumber: topic.sortNumber,
-                            isHidden: topic.isHidden,
-                        })),
-                    });
-                } catch (error) {
-                    console.error("Failed to load category details", error);
-                } finally {
-                    setIsLoading(false);
-                }
-            };
-            fetchDetail();
+            fetchCategory(categoryId);
         } else {
             // Reset to defaults if creating new
             reset({
@@ -94,9 +59,29 @@ export const useCategoryForm = ({ categoryId, onSuccess }: UseCategoryFormProps)
                 topics: [],
             });
         }
-    }, [categoryId, reset]);
+    }, [categoryId, fetchCategory, reset]);
 
-    // 4. Handle Submission
+    // Update form when category data loads
+    useEffect(() => {
+        if (categoryData) {
+            reset({
+                categoryId: categoryData.categoryId,
+                name: categoryData.name,
+                description: categoryData.description,
+                imageUrl: categoryData.imageUrl,
+                sortNumber: categoryData.sortNumber,
+                isHidden: categoryData.isHidden,
+                topics: categoryData.categoryTopics.map(topic => ({
+                    topicId: topic.topicId,
+                    name: topic.name,
+                    sortNumber: topic.sortNumber,
+                    isHidden: topic.isHidden,
+                })),
+            });
+        }
+    }, [categoryData, reset]);
+
+    // Handle Submission
     const onSubmit = async (values: CategoryUpdateRequest) => {
         setIsSubmitting(true);
         try {
@@ -128,7 +113,7 @@ export const useCategoryForm = ({ categoryId, onSuccess }: UseCategoryFormProps)
         isLoading,
         isSubmitting,
         isEdit: !!categoryId,
-        topics,
+        topics: topics ?? [],
         isLoadingTopics,
     };
 };

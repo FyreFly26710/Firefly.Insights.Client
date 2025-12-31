@@ -7,7 +7,7 @@ import {
     apiCategoriesGetLookupList,
 } from '@/features/articles/api';
 import type { TopicCreateRequest, TopicUpdateRequest } from '@/features/articles/api-types';
-import type { LookupItemDto } from '@/features/shared/types';
+import { useAsync } from '@/features/shared/hooks/useAsync ';
 
 interface UseTopicFormProps {
     topicId?: number | null;
@@ -15,14 +15,15 @@ interface UseTopicFormProps {
 }
 
 export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
-    const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Categories lookup list state
-    const [categories, setCategories] = useState<LookupItemDto[]>([]);
-    const [isLoadingCategories, setIsLoadingCategories] = useState(false);
+    // Categories lookup list
+    const { data: categories, isLoading: isLoadingCategories, execute: fetchCategories } = useAsync(apiCategoriesGetLookupList);
 
-    // 1. Initialize React Hook Form
+    // Topic details
+    const { data: topicData, isLoading, execute: fetchTopic } = useAsync(apiTopicsGetById);
+
+    // Initialize React Hook Form
     const form = useForm<TopicUpdateRequest>({
         defaultValues: {
             topicId: topicId ?? 0,
@@ -37,46 +38,15 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
 
     const { reset, handleSubmit } = form;
 
-    // 2. Fetch categories lookup list on mount
+    // Fetch categories lookup list on mount
     useEffect(() => {
-        const fetchCategories = async () => {
-            setIsLoadingCategories(true);
-            try {
-                const categoriesList = await apiCategoriesGetLookupList();
-                setCategories(categoriesList);
-            } catch (error) {
-                console.error('Failed to fetch categories:', error);
-            } finally {
-                setIsLoadingCategories(false);
-            }
-        };
         fetchCategories();
-    }, []);
+    }, [fetchCategories]);
 
-    // 3. Fetch data if in Edit Mode
+    // Fetch data if in Edit Mode
     useEffect(() => {
         if (topicId) {
-            const fetchDetail = async () => {
-                setIsLoading(true);
-                try {
-                    const data = await apiTopicsGetById(topicId);
-                    // Map DTO to Form Fields
-                    reset({
-                        name: data.name,
-                        description: data.description,
-                        categoryId: data.categoryId,
-                        imageUrl: data.imageUrl,
-                        sortNumber: data.sortNumber,
-                        isHidden: data.isHidden,
-                        topicArticles: data.topicArticles,
-                    });
-                } catch (error) {
-                    console.error("Failed to load topic details", error);
-                } finally {
-                    setIsLoading(false);
-                }
-            };
-            fetchDetail();
+            fetchTopic(topicId);
         } else {
             // Reset to defaults if creating new
             reset({
@@ -90,9 +60,24 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
                 topicArticles: [],
             });
         }
-    }, [topicId, reset]);
+    }, [topicId, fetchTopic, reset]);
 
-    // 4. Handle Submission
+    // Update form when topic data loads
+    useEffect(() => {
+        if (topicData) {
+            reset({
+                name: topicData.name,
+                description: topicData.description,
+                categoryId: topicData.categoryId,
+                imageUrl: topicData.imageUrl,
+                sortNumber: topicData.sortNumber,
+                isHidden: topicData.isHidden,
+                topicArticles: topicData.topicArticles,
+            });
+        }
+    }, [topicData, reset]);
+
+    // Handle Submission
     const onSubmit = async (values: TopicUpdateRequest) => {
         setIsSubmitting(true);
         try {
@@ -125,7 +110,7 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
         isLoading,
         isSubmitting,
         isEdit: !!topicId,
-        categories,
+        categories: categories ?? [],
         isLoadingCategories,
     };
 };

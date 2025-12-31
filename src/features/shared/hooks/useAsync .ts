@@ -16,7 +16,7 @@ export const useAsync = <T, Args extends any[]>(
         setIsLoading(true);
         setError(null); // Clear previous errors
 
-        // Clear data only if arguments changed (different topicId)
+        // Clear data only if arguments changed
         if (argsChanged) {
             setData(null);
             lastArgsRef.current = argsKey;

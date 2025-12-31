@@ -1,12 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { apiArticlesGetList } from '@/features/articles/api';
-import type { ArticleDto, ArticleListRequest } from '@/features/articles/api-types';
+import type { ArticleListRequest } from '@/features/articles/api-types';
+import { useAsync } from '@/features/shared/hooks/useAsync ';
 
 export const useArticlesTable = () => {
-    const [articles, setArticles] = useState<ArticleDto[]>([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
-
     const [query, setQuery] = useState<ArticleListRequest>({
         pageNumber: 1,
         pageSize: 25,
@@ -17,22 +14,11 @@ export const useArticlesTable = () => {
         // isHidden: undefined,
     });
 
-    const fetchArticles = useCallback(async () => {
-        setIsLoading(true);
-        try {
-            const result = await apiArticlesGetList(query);
-            setArticles(result.data);
-            setTotalCount(result.totalCount);
-        } catch (error) {
-            console.error('Failed to fetch articles:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [query]);
+    const { data, isLoading, execute } = useAsync(apiArticlesGetList);
 
     useEffect(() => {
-        fetchArticles();
-    }, [fetchArticles]);
+        execute(query);
+    }, [query, execute]);
 
     const updateQuery = (updates: Partial<ArticleListRequest>) => {
         setQuery((prev) => ({
@@ -42,12 +28,12 @@ export const useArticlesTable = () => {
         }));
     };
 
-    const refresh = () => fetchArticles();
+    const refresh = () => execute(query);
 
     return {
         // Data & State
-        articles,
-        totalCount,
+        articles: data?.data ?? [],
+        totalCount: data?.totalCount ?? 0,
         isLoading,
         query,
 

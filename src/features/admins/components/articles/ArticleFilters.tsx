@@ -26,7 +26,7 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
     const { topics, isLoading } = useArticleFilter();
 
 
-    // 1. Debounce Logic: Only trigger API call after user stops typing for 500ms
+    // Debounce Logic: Only trigger API call after user stops typing for 500ms
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             if (searchTerm !== query.articleTitle) {
@@ -37,7 +37,7 @@ export const ArticleFilters: React.FC<ArticleFiltersProps> = ({
         return () => clearTimeout(delayDebounceFn);
     }, [searchTerm]);
 
-    // 2. Clear Search Helper
+    // Clear Search Helper
     const handleClearSearch = () => {
         setSearchTerm('');
         onFilterChange({ articleTitle: '' });

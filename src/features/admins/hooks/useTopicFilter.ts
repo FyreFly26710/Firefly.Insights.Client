@@ -1,28 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { apiCategoriesGetLookupList } from '@/features/articles/api';
-import type { LookupItemDto } from '@/features/shared/types';
+import { useAsync } from '@/features/shared/hooks/useAsync ';
 
 export const useTopicFilter = () => {
-    const [categories, setCategories] = useState<LookupItemDto[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const { data: categories, isLoading, execute } = useAsync(apiCategoriesGetLookupList);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            setIsLoading(true);
-            try {
-                const categoriesList = await apiCategoriesGetLookupList();
-                setCategories(categoriesList);
-            } catch (error) {
-                console.error('Failed to fetch categories:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchCategories();
-    }, []);
+        execute();
+    }, [execute]);
 
     return {
-        categories,
+        categories: categories ?? [],
         isLoading,
     };
 };

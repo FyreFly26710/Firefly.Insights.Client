@@ -23,7 +23,7 @@ interface ArticleTableProps {
     onDelete: (articleId: number) => void;
 }
 
-// 1. Column Definitions
+// Column Definitions
 export const ArticleTable: React.FC<ArticleTableProps> = ({
     articles,
     totalCount,
@@ -34,7 +34,6 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
     onDelete
 }) => {
 
-    // 1. Column Definitions refined for .NET Backend constraints
     const columns: GridColDef<ArticleDto>[] = [
         {
             field: 'articleId',
@@ -105,7 +104,7 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
         },
     ];
 
-    // 2. Map MUI events back to our custom Hook
+    // Map MUI events back to our custom Hook
     const handlePaginationModelChange = (model: GridPaginationModel) => {
         onQueryChange({
             pageNumber: model.page + 1, // Convert 0-indexed to 1-indexed
