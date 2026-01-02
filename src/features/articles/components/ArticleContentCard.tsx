@@ -15,7 +15,8 @@ export const ArticleContentCard = ({ content }: ArticleContentCardProps) => {
             sx={{
                 p: 3,
                 width: '100%',
-                overflowY: 'auto', margin: '0 auto',
+                // overflowY: 'auto',
+                margin: '0 auto',
 
                 '&::-webkit-scrollbar': {
                     width: '6px',

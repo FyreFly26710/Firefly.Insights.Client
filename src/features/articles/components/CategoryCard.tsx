@@ -1,7 +1,7 @@
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Avatar, CardHeader, Grid } from '@mui/material';
+import { Avatar, CardHeader, CardMedia, Grid } from '@mui/material';
 import type { CategoryDto } from '../api-types';
 import TopicCard from './TopicCard';
 
@@ -10,14 +10,23 @@ type CategoryCardProps = {
 }
 
 export default function CategoryCard({ category }: CategoryCardProps) {
-    const imageUrl = category.imageUrl || 'https://ih1.redbubble.net/image.5582017600.4418/st,small,507x507-pad,600x600,f8f8f8.webp';
+    const imageUrl = category.imageUrl;
+
     return (
-        <Card id="category-card" variant="outlined" >
+        <Card id="category-card" variant="outlined">
+            <CardMedia
+                component="img"
+                height="160"
+                image={imageUrl}
+                alt={category.name}
+                sx={{ objectFit: 'cover' }}
+            />
+
             <CardHeader
                 title={category.name}
                 subheader={category.description}
-                avatar={<Avatar src={imageUrl} alt={category.name} />}
             />
+
             <CardContent sx={{ maxHeight: '500px', overflow: 'auto' }}>
                 <Grid container spacing={2}>
                     {category.categoryTopics.map((topic) => (
@@ -25,6 +34,6 @@ export default function CategoryCard({ category }: CategoryCardProps) {
                     ))}
                 </Grid>
             </CardContent>
-        </Card >
+        </Card>
     );
 }

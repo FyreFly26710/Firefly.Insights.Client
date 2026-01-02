@@ -11,6 +11,7 @@ export const Login = () => {
             component="main"
             sx={{
                 minHeight: '100vh',
+                width: '100%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

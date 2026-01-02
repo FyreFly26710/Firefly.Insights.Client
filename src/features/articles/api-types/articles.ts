@@ -22,6 +22,7 @@ export type ArticleDto = {
     isTopicSummary: boolean;
     userId: string;
     userName: string;
+    userAvatar: string;
     sortNumber: number;
     isHidden: boolean;
     createdAt: string;

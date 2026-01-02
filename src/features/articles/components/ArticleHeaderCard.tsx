@@ -6,9 +6,10 @@ type ArticleHeaderCardProps = {
     description: string;
     userName: string;
     tags: string[];
+    userAvatar: string;
 };
 
-export const ArticleHeaderCard = ({ title, description, userName, tags }: ArticleHeaderCardProps) => {
+export const ArticleHeaderCard = ({ title, description, userName, userAvatar, tags }: ArticleHeaderCardProps) => {
     return (
         <Card
             elevation={0}
@@ -34,28 +35,30 @@ export const ArticleHeaderCard = ({ title, description, userName, tags }: Articl
                         >
                             {title}
                         </Typography>
-
-                        {/* Tags Section */}
-                        <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-                            {tags.map((tag) => (
-                                <Chip
-                                    key={tag}
-                                    label={tag}
-                                    size="small"
-                                    variant="outlined"
-                                    sx={{ fontWeight: 500, borderRadius: 1.5 }}
-                                />
-                            ))}
-                        </Stack>
-                    </Flex>
-                    {/* Author Info */}
-                    <Flex gap={1}>
-                        <Avatar sx={{ width: 20, height: 20, mr: 1, bgcolor: 'primary.main' }}>
-                            {userName.charAt(0)}
-                        </Avatar>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                            {userName}
-                        </Typography>
+                        <Flex justify="space-between">
+                            {/* Tags Section */}
+                            <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+                                {tags.map((tag) => (
+                                    <Chip
+                                        key={tag}
+                                        label={tag}
+                                        size="small"
+                                        variant="outlined"
+                                        sx={{ fontWeight: 500, borderRadius: 1.5 }}
+                                    />
+                                ))}
+                            </Stack>
+                            {/* Author Info */}
+                            <Flex gap={1}>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600, mr: 1 }}>
+                                    Author:
+                                </Typography>
+                                <Avatar src={userAvatar} sx={{ width: 20, height: 20, mr: 1 }} />
+                                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                                    {userName}
+                                </Typography>
+                            </Flex>
+                        </Flex>
                     </Flex>
                 </Flex>
 

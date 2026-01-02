@@ -11,12 +11,25 @@ interface Props {
 
 export const GenerateTopicArticlesForm = ({ onSubmit }: Props) => {
     const { form, options, loading, watched } = useGenerateTopicArticles();
-    const { register, control, handleSubmit, formState: { errors, isSubmitting } } = form;
+    const { register, control, handleSubmit, reset, formState: { errors, isSubmitting } } = form;
     const filteredCategories = options.categories?.filter(c => c.id !== -1) ?? [];
     const filteredTopics = options.topics?.filter(t => t.id !== -1) ?? [];
 
+    const handleFormSubmit = async (data: GenerateArticleSummaryRequest) => {
+        try {
+            await onSubmit(data);
+            reset({
+                topic: '',
+                topicDescription: '',
+                topicUrl: '',
+                userPrompt: '',
+            });
+        } catch (error) {
+            console.error("Submission failed", error);
+        }
+    };
     return (
-        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box component="form" onSubmit={handleSubmit(handleFormSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Paper sx={{ p: 2, bgcolor: 'background.default', border: '1px solid', borderColor: 'divider' }}>
                 <Typography variant="subtitle2" fontWeight="bold" gutterBottom>Instructions</Typography>
                 <Typography variant="body2" component="div">

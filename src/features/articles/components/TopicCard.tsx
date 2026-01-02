@@ -9,14 +9,13 @@ type TopicCardProps = {
 }
 
 export default function TopicCard({ topicId, name, description, imageUrl }: TopicCardProps) {
-    const defaultImageUrl = imageUrl || 'https://ih1.redbubble.net/image.5582017600.4418/st,small,507x507-pad,600x600,f8f8f8.webp';
 
     return (
         <Card id="topic-card" variant="outlined" sx={{ maxWidth: '300px' }}>
             <CardActionArea component={Link} to={`/topics/${topicId}`}>
                 <CardHeader
                     title={name}
-                    avatar={<Avatar src={defaultImageUrl} alt={name} />}
+                    avatar={<Avatar src={imageUrl} alt={name} />}
                 />
                 <CardContent>
                     <Typography

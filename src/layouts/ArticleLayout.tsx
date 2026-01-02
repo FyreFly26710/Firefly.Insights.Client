@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Outlet } from "react-router-dom";
 import Flex from "@/components/Elements/Flex/Flex";
 import { useAsync } from "@/features/shared/hooks/useAsync ";
@@ -6,12 +6,13 @@ import { apiTopicsGetById } from "@/features/articles/api";
 import { TopicSidebar } from "@/features/articles/components/TopicSidebar";
 import { PageSpinner } from "@/components/Elements/Spinner/PageSpinner";
 import { ErrorPageLayout } from "./ErrorPageLayout";
-import { Container } from "@mui/material";
+import { Box, Container, IconButton } from "@mui/material";
 import type { SidebarArticle } from "@/features/articles/types";
+import MenuIcon from '@mui/icons-material/Menu';
 
 export const ArticleLayout = () => {
     const { topicId } = useParams();
-
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar open state
     const { data, isLoading, error, execute } = useAsync(apiTopicsGetById);
 
     useEffect(() => {
@@ -41,17 +42,38 @@ export const ArticleLayout = () => {
 
     return (
 
-        <Flex id="article-layout" height="100%" width="100%">
+        <Flex id="article-layout" height="100%" width="100%" overflow="hidden">
+            {/* Sidebar now receives the open state */}
             <TopicSidebar
+                isOpen={isSidebarOpen}
                 topicId={data?.topicId ?? 0}
                 name={data?.name ?? ''}
                 imageUrl={data?.imageUrl ?? ''}
                 topicArticles={topicArticles}
             />
-            <Container maxWidth="xl">
-                <Outlet />
-            </Container>
 
+            <Box sx={{ flexGrow: 1, height: '100%', overflowY: 'auto', minWidth: 0, position: 'relative' }}>
+                {/* Floating Toggle Button */}
+                <IconButton
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    sx={{
+                        position: 'fixed',
+                        left: isSidebarOpen ? 310 : 10, // Adjust based on sidebar width
+                        top: 70,
+                        zIndex: 10,
+                        transition: 'left 0.3s ease',
+                        bgcolor: 'background.paper',
+                        boxShadow: 2,
+                        '&:hover': { bgcolor: 'action.hover' }
+                    }}
+                >
+                    <MenuIcon />
+                </IconButton>
+
+                <Container maxWidth="xl" sx={{ py: 4 }}>
+                    <Outlet />
+                </Container>
+            </Box>
         </Flex>
     );
 };

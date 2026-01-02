@@ -5,8 +5,31 @@ import { useEffect } from "react";
 import { ErrorPageLayout } from "@/layouts/ErrorPageLayout";
 import { ArticleHeaderCard } from "../components/ArticleHeaderCard";
 import { ArticleContentCard } from "../components/ArticleContentCard";
-import Flex from "@/components/Elements/Flex/Flex";
 import { PageSpinner } from "@/components/Elements/Spinner/PageSpinner";
+import { Box, styled } from "@mui/material";
+
+const ArticlePageContainer = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    height: '100%',
+    width: '100%',
+    overflowY: 'auto',
+    overflowX: 'auto',
+    '&::-webkit-scrollbar': {
+        width: '6px',
+    },
+    '&::-webkit-scrollbar-track': {
+        backgroundColor: theme.palette.background.default,
+    },
+    '&::-webkit-scrollbar-thumb': {
+        backgroundColor: theme.palette.divider,
+        borderRadius: '10px',
+        '&:hover': {
+            backgroundColor: theme.palette.primary.light,
+        },
+    },
+}));
 
 export const ArticlePage = () => {
     const { topicId, articleId } = useParams();
@@ -26,9 +49,9 @@ export const ArticlePage = () => {
     }
 
     return (
-        <Flex id="article-page" direction="column" gap={8} height="100%" width="100%">
-            <ArticleHeaderCard title={data.title} description={data.description} userName={data.userName} tags={data.tags.map(t => t.name)} />
+        <ArticlePageContainer id="article-page">
+            <ArticleHeaderCard title={data.title} description={data.description} userName={data.userName} userAvatar={data.userAvatar} tags={data.tags.map(t => t.name)} />
             <ArticleContentCard content={data.content} />
-        </Flex>
+        </ArticlePageContainer>
     );
 }
