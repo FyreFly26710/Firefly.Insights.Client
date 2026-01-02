@@ -1,13 +1,13 @@
 import { Box, Typography, Stack } from "@mui/material";
 
-interface AdminPageHeaderProps {
+interface PageHeaderProps {
     title: string;
     action?: React.ReactNode;
 }
 
-export const AdminPageHeader = ({ title, action }: AdminPageHeaderProps) => {
+export const PageHeader = ({ title, action }: PageHeaderProps) => {
     return (
-        <Stack id="admin-page-header"
+        <Stack id="page-header"
             direction="row"
             justifyContent="space-between"
             alignItems="center"

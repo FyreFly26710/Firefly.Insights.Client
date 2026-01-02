@@ -12,6 +12,7 @@ import {
 } from '@mui/x-data-grid';
 import type { ArticleDto, ArticleListRequest } from '@/features/articles/api-types';
 import { TableActions } from '../common/TableActions';
+import { StatusChip } from '@/components/Tags/StatusChip';
 
 interface ArticleTableProps {
     articles: ArticleDto[];
@@ -65,11 +66,10 @@ export const ArticleTable: React.FC<ArticleTableProps> = ({
             width: 120,
             sortable: true,
             renderCell: (params) => (
-                <Chip
-                    label={params.value ? "Hidden" : "Visible"}
-                    color={params.value ? "default" : "success"}
-                    size="small"
-                    variant="outlined"
+                <StatusChip
+                    value={params.value}
+                    trueLabel="Hidden"
+                    falseLabel="Visible"
                 />
             )
         },

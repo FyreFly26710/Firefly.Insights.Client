@@ -1,7 +1,7 @@
-import type { PageRequest } from '@/features/shared/types';
+import type { PageInfo } from '@/features/shared/types';
 import type { TagDto } from './tags';
 
-export type ArticleListRequest = PageRequest & {
+export type ArticleListRequest = PageInfo & {
     articleTitle?: string;
     topicId?: number;
     isTopicSummary?: boolean;
@@ -31,7 +31,7 @@ export type ArticleDto = {
 
 export type PagedArticleDto = {
     data: ArticleDto[];
-    pageRequest: PageRequest;
+    pageRequest: PageInfo;
     totalCount: number;
     totalPages: number;
 }

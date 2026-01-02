@@ -1,4 +1,4 @@
-export type PageRequest = {
+export type PageInfo = {
     pageNumber: number;
     pageSize: number;
     sortField: string;
@@ -7,4 +7,10 @@ export type PageRequest = {
 export type LookupItemDto = {
     id: number;
     name: string;
+}
+export interface Paged<T> {
+    pageInfo: PageInfo;
+    totalCount: number;
+    totalPages: number;
+    data: T[];
 }

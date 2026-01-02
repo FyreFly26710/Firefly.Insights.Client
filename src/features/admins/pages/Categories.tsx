@@ -10,7 +10,7 @@ import { CategoryFormDrawer } from '../components/categories/CategoryFormDrawer'
 import { FormNotification } from '../components/common/FormNotification';
 import { DeleteDialog } from '../components/common/DeleteDialog';
 import { apiCategoriesDelete } from '@/features/articles/api';
-import { AdminPageHeader } from '../components/common/AdminPageHeader';
+import { PageHeader } from '@/components/Header/PageHeader';
 
 export const Categories = () => {
     // Data Engine Hook (Handles API fetch)
@@ -100,7 +100,7 @@ export const Categories = () => {
 
     return (
         <Container id="categories-page" component="main" maxWidth="xl" sx={{ py: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <AdminPageHeader
+            <PageHeader
                 title="Categories"
                 action={
                     <Button

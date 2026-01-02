@@ -10,7 +10,7 @@ import { ArticleFormDrawer } from '../components/articles/ArticleFormDrawer';
 import { FormNotification } from '../components/common/FormNotification';
 import { DeleteDialog } from '../components/common/DeleteDialog';
 import { apiArticlesDelete } from '@/features/articles/api';
-import { AdminPageHeader } from '../components/common/AdminPageHeader';
+import { PageHeader } from '@/components/Header/PageHeader';
 
 export const Articles = () => {
     // Data Engine Hook (Handles API fetch, pagination, sorting, filtering)
@@ -80,7 +80,7 @@ export const Articles = () => {
 
     return (
         <Container id="articles-page" component="main" maxWidth="xl" sx={{ py: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <AdminPageHeader
+            <PageHeader
                 title="Articles"
                 action={
                     <Button

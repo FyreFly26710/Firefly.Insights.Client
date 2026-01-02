@@ -1,6 +1,6 @@
-import type { PageRequest } from "@/features/shared/types";
+import type { PageInfo } from "@/features/shared/types";
 
-export type TopicListRequest = PageRequest & {
+export type TopicListRequest = PageInfo & {
     topicName?: string;
     categoryId?: number;
     isHidden?: boolean;
@@ -32,7 +32,7 @@ export type TopicArticleDto = {
 }
 export type PagedTopicDto = {
     data: TopicDto[];
-    pageRequest: PageRequest;
+    pageRequest: PageInfo;
     totalCount: number;
     totalPages: number;
 }

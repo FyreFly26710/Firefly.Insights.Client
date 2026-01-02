@@ -3,7 +3,7 @@ import type { TopicDto, PagedTopicDto, TopicListRequest, TopicCreateRequest, Top
 import type { LookupItemDto } from '@/features/shared/types';
 
 export const apiTopicsGetList = async (request: TopicListRequest) => {
-    const response = await axiosClient.get(`/contents/topics`, {
+    const response = await axiosClient.get(`/api/contents/topics`, {
         params: {
             ...request,
         },
@@ -11,22 +11,22 @@ export const apiTopicsGetList = async (request: TopicListRequest) => {
     return response.data as PagedTopicDto;
 }
 export const apiTopicsGetById = async (topicId: number) => {
-    const response = await axiosClient.get(`/contents/topics/${topicId}`);
+    const response = await axiosClient.get(`/api/contents/topics/${topicId}`);
     return response.data as TopicDto;
 }
 export const apiTopicsGetLookupList = async () => {
-    const response = await axiosClient.get(`/contents/topics/lookup-list`);
+    const response = await axiosClient.get(`/api/contents/topics/lookup-list`);
     return response.data as LookupItemDto[];
 }
 export const apiTopicsCreate = async (request: TopicCreateRequest) => {
-    const response = await axiosClient.post(`/contents/topics`, request);
+    const response = await axiosClient.post(`/api/contents/topics`, request);
     return response.data as number;
 }
 export const apiTopicsUpdate = async (topicId: number, request: TopicUpdateRequest) => {
-    const response = await axiosClient.put(`/contents/topics/${topicId}`, request);
+    const response = await axiosClient.put(`/api/contents/topics/${topicId}`, request);
     return response.data as boolean;
 }
 export const apiTopicsDelete = async (topicId: number) => {
-    const response = await axiosClient.delete(`/contents/topics/${topicId}`);
+    const response = await axiosClient.delete(`/api/contents/topics/${topicId}`);
     return response.data as boolean;
 }
