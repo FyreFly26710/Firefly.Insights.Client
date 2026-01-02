@@ -9,15 +9,8 @@ const { Categories: AdminCategories } = lazily(() => import('@/features/admins/p
 const { AiModels: AgentAiModels } = lazily(() => import('@/features/agents/pages/AiModels'));
 const { ExecutionLogs: AgentExecutionLogs } = lazily(() => import('@/features/agents/pages/ExecutionLogs'));
 const { JobLogs: AgentJobLogs } = lazily(() => import('@/features/agents/pages/JobLogs'));
+const { Generate: AgentGenerate } = lazily(() => import('@/features/agents/pages/Generate'));
 export const protectedRoutes = () => [
-    {
-        path: '/agents',
-        element: (
-            <ProtectedRoute>
-                <div>Agents Page</div>
-            </ProtectedRoute>
-        ),
-    },
     {
         path: '/admin',
         element: (
@@ -41,14 +34,14 @@ export const protectedRoutes = () => [
             </ProtectedRoute>
         ),
         children: [
-            { index: true, element: <div>Agents Dashboard Home</div> }, // Default view
+            { index: true, element: <AgentExecutionLogs /> }, // Default view
             { path: 'execution-logs', element: <AgentExecutionLogs /> },
             { path: 'job-logs', element: <AgentJobLogs /> },
             { path: 'ai-models', element: <AgentAiModels /> },
             {
                 path: 'agents',
                 children: [
-                    { path: 'generate-topics', element: <div>Agent Generate Topics</div> },
+                    { path: 'generate', element: <AgentGenerate /> },
                 ]
             },
         ]

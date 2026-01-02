@@ -33,7 +33,7 @@ export const AgentLayout = () => {
         { text: 'Execution Logs', path: '/agents/execution-logs', icon: <AssignmentIcon /> },
         { text: 'Job Logs', path: '/agents/job-logs', icon: <StorageIcon /> },
         { text: 'AI Models', path: '/agents/ai-models', icon: <SmartToyIcon /> },
-        { text: 'Generate Topics', path: '/agents/agents/generate-topics', icon: <AutoFixHighIcon /> },
+        { text: 'Generate', path: '/agents/agents/generate', icon: <AutoFixHighIcon /> },
     ];
 
     return (

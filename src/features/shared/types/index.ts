@@ -5,8 +5,12 @@ export type PageInfo = {
     isAscending: boolean;
 }
 export type LookupItemDto = {
-    id: number;
+    id: string | number;
     name: string;
+}
+
+export type LookupItem = LookupItemDto & {
+    description?: string;
 }
 export interface Paged<T> {
     pageInfo: PageInfo;
