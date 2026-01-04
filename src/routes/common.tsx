@@ -9,7 +9,7 @@ const { CategoryListPage } = lazily(() => import('@/features/articles/pages/Cate
 const { TopicPage } = lazily(() => import('@/features/articles/pages/TopicPage'));
 const { ArticlePage } = lazily(() => import('@/features/articles/pages/ArticlePage'));
 
-export const commonRoutes = (): RouteObject[] => [
+export const commonRoutes: RouteObject[] = [
     {
         path: "/",
         children: [

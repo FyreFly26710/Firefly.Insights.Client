@@ -10,7 +10,7 @@ const { AiModels: AgentAiModels } = lazily(() => import('@/features/agents/pages
 const { ExecutionLogs: AgentExecutionLogs } = lazily(() => import('@/features/agents/pages/ExecutionLogs'));
 const { JobLogs: AgentJobLogs } = lazily(() => import('@/features/agents/pages/JobLogs'));
 const { Generate: AgentGenerate } = lazily(() => import('@/features/agents/pages/Generate'));
-export const protectedRoutes = () => [
+export const protectedRoutes = [
     {
         path: '/admin',
         element: (

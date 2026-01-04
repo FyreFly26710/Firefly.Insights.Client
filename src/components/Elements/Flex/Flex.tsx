@@ -103,7 +103,7 @@ export default function Flex({
   basis = "auto",
   margin = "0",
   padding = "0",
-  width = "auto",
+  width = "100%",
   height = "auto",
   overflow = "visible",
   ...rest

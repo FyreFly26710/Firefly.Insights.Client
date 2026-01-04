@@ -49,7 +49,7 @@ export const ArticleHeaderCard = ({ title, description, userName, userAvatar, ta
                                 ))}
                             </Stack>
                             {/* Author Info */}
-                            <Flex gap={1}>
+                            <Flex gap={1} width="auto">
                                 <Typography variant="subtitle2" sx={{ fontWeight: 600, mr: 1 }}>
                                     Author:
                                 </Typography>

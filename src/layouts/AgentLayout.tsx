@@ -6,6 +6,8 @@ import StorageIcon from '@mui/icons-material/Storage';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import Flex from '@/components/Elements/Flex/Flex';
+import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
+import { Suspense } from 'react';
 
 const SIDEBAR_WIDTH = 280;
 
@@ -79,7 +81,9 @@ export const AgentLayout = () => {
 
             {/* Page Content */}
             <MainContent>
-                <Outlet />
+                <Suspense fallback={<PageSpinner />}>
+                    <Outlet />
+                </Suspense>
             </MainContent>
         </Flex>
     );

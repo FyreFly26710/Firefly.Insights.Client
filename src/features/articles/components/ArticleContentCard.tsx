@@ -17,23 +17,6 @@ export const ArticleContentCard = ({ content }: ArticleContentCardProps) => {
                 width: '100%',
                 // overflowY: 'auto',
                 margin: '0 auto',
-
-                '&::-webkit-scrollbar': {
-                    width: '6px',
-                },
-                '&::-webkit-scrollbar-track': {
-                    backgroundColor: theme.palette.background.default,
-                },
-                '&::-webkit-scrollbar-thumb': {
-                    backgroundColor: theme.palette.divider,
-                    borderRadius: '10px',
-                    '&:hover': {
-                        backgroundColor: theme.palette.primary.light,
-                    },
-                },
-                /* Firefox Support */
-                scrollbarWidth: 'thin',
-                scrollbarColor: `${theme.palette.divider} ${theme.palette.background.default}`,
             }}
         >
             <ReactMarkdown

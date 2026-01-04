@@ -82,7 +82,7 @@ export function Header() {
         {isAdmin && <AdminMenu />}
       </Flex>
 
-      <Flex id="layout-header-right" gap={12} align="center">
+      <Flex id="layout-header-right" gap={12} align="center" width="auto">
         <IconButton onClick={toggleMode} color="inherit" aria-label="Toggle theme">
           {isDark ? <LightModeIcon /> : <DarkModeIcon />}
         </IconButton>

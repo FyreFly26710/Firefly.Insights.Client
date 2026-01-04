@@ -25,6 +25,32 @@ export function ThemeModeProvider({ children }: ThemeModeProviderProps) {
         shape: {
           borderRadius: 8,
         },
+        components: {
+          MuiCssBaseline: {
+            styleOverrides: (theme) => ({
+              /* Define scrollbar styles for the whole app */
+              '*': {
+                '&::-webkit-scrollbar': {
+                  width: '6px',
+                  height: '6px',
+                },
+                '&::-webkit-scrollbar-track': {
+                  backgroundColor: theme.palette.background.default,
+                },
+                '&::-webkit-scrollbar-thumb': {
+                  backgroundColor: theme.palette.divider,
+                  borderRadius: '10px',
+                  '&:hover': {
+                    backgroundColor: theme.palette.primary.light,
+                  },
+                },
+                /* Firefox support */
+                scrollbarWidth: 'thin',
+                scrollbarColor: `${theme.palette.divider} ${theme.palette.background.default}`,
+              },
+            }),
+          },
+        }
       }),
     [mode]
   );

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useParams, Outlet } from "react-router-dom";
 import Flex from "@/components/Elements/Flex/Flex";
 import { useAsync } from "@/features/shared/hooks/useAsync ";
@@ -12,7 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 export const ArticleLayout = () => {
     const { topicId } = useParams();
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Sidebar open state
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const { data, isLoading, error, execute } = useAsync(apiTopicsGetById);
 
     useEffect(() => {
@@ -33,11 +33,9 @@ export const ArticleLayout = () => {
                 title: article.title,
             }));
     }, [data]);
-    if (isLoading) {
-        return <PageSpinner />;
-    }
-    if (error || !data) {
-        return <ErrorPageLayout title="Error" message={error?.message ?? "Failed to load topic"} />;
+
+    if (error) {
+        return <ErrorPageLayout title="Error" message={error.message} />;
     }
 
     return (
@@ -50,6 +48,7 @@ export const ArticleLayout = () => {
                 name={data?.name ?? ''}
                 imageUrl={data?.imageUrl ?? ''}
                 topicArticles={topicArticles}
+                isLoading={isLoading}
             />
 
             <Box sx={{ flexGrow: 1, height: '100%', overflowY: 'auto', minWidth: 0, position: 'relative' }}>
@@ -71,7 +70,9 @@ export const ArticleLayout = () => {
                 </IconButton>
 
                 <Container maxWidth="xl" sx={{ py: 4 }}>
-                    <Outlet />
+                    <Suspense fallback={<PageSpinner />}>
+                        <Outlet />
+                    </Suspense>
                 </Container>
             </Box>
         </Flex>

@@ -15,20 +15,8 @@ const ArticlePageContainer = styled(Box)(({ theme }) => ({
     height: '100%',
     width: '100%',
     overflowY: 'auto',
-    overflowX: 'auto',
-    '&::-webkit-scrollbar': {
-        width: '6px',
-    },
-    '&::-webkit-scrollbar-track': {
-        backgroundColor: theme.palette.background.default,
-    },
-    '&::-webkit-scrollbar-thumb': {
-        backgroundColor: theme.palette.divider,
-        borderRadius: '10px',
-        '&:hover': {
-            backgroundColor: theme.palette.primary.light,
-        },
-    },
+    overflowX: 'hidden',
+
 }));
 
 export const ArticlePage = () => {
