@@ -61,7 +61,7 @@ export const JobLogsGrid: React.FC<JobLogsGridProps> = ({
             headerName: 'AI Model',
             width: 300,
             sortable: false,
-            valueGetter: (value, row) => row.aiModel ? `${row.aiModel.provider} - ${row.aiModel.model}` : ''
+            valueGetter: (_, row) => row.aiModel ? `${row.aiModel.provider} - ${row.aiModel.model}` : ''
         },
         {
             field: 'createdAt',

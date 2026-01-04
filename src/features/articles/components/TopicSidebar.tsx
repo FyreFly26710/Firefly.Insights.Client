@@ -1,4 +1,4 @@
-import { Box, Typography, List, ListItem, ListItemText, Paper, ListItemButton, Button } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemText, Paper, ListItemButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { SidebarArticle } from "../types";
 import { Link } from 'react-router-dom';

@@ -1,7 +1,7 @@
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import { Avatar, CardHeader, CardMedia, Grid } from '@mui/material';
+import { CardHeader, CardMedia, Grid } from '@mui/material';
 import type { CategoryDto } from '../api-types';
 import TopicCard from './TopicCard';
 

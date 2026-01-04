@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Container, Box, TextField, Stack, MenuItem } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import { useJobLogsTable } from '../hooks/useJobLogsTable';
 import { JobLogsGrid } from '../components/JobLogsGrid';
 import { PageHeader } from '@/components/Header/PageHeader';

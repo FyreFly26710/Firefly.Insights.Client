@@ -1,5 +1,5 @@
 import Flex from '@/components/Elements/Flex/Flex';
-import { Card, CardContent, Typography, Chip, Box, Avatar, Stack } from '@mui/material';
+import { Card, CardContent, Typography, Chip, Avatar, Stack } from '@mui/material';
 
 type ArticleHeaderCardProps = {
     title: string;

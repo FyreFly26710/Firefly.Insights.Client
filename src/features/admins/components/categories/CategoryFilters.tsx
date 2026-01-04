@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
     Paper,
-    TextField,
     Stack,
 } from '@mui/material';
 import { SearchFilter } from '../common/SearchFilter';

@@ -4,11 +4,9 @@ import {
     TextField,
     FormControlLabel,
     Checkbox,
-    Grid,
     Paper,
     Typography,
     IconButton,
-    Box
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';

@@ -32,7 +32,7 @@ const ArticlePageContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const ArticlePage = () => {
-    const { topicId, articleId } = useParams();
+    const { articleId } = useParams();
     const { data, isLoading, error, execute } = useAsync(apiArticlesGetById);
 
     useEffect(() => {

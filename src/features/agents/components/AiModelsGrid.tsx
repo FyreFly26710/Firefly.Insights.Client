@@ -1,7 +1,6 @@
 import React from 'react';
 import {
     Paper,
-    Typography,
     Alert
 } from '@mui/material';
 import {

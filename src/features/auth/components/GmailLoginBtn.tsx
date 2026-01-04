@@ -1,6 +1,8 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { GOOGLE_CLIENT_ID, API_URL } from '@/config';
+import { useUserStore } from '@/stores/useUserStore';
 
 const GoogleIcon = () => (
     <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
@@ -13,14 +15,12 @@ const GoogleIcon = () => (
 
 const StyledButton = styled(Button)(({ theme }) => {
     const isDark = theme.palette.mode === 'dark';
-
     return {
         height: '48px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: theme.spacing(1.5),
-
         backgroundColor: isDark ? theme.palette.grey[900] : theme.palette.common.white,
         color: theme.palette.text.primary,
         border: `1px solid ${theme.palette.divider}`,
@@ -30,22 +30,58 @@ const StyledButton = styled(Button)(({ theme }) => {
         fontSize: '0.95rem',
         boxShadow: isDark ? 'none' : theme.shadows[1],
         transition: theme.transitions.create(['background-color', 'border-color', 'box-shadow']),
-
         '&:hover': {
             backgroundColor: isDark ? theme.palette.action.hover : theme.palette.grey[50],
             borderColor: isDark ? theme.palette.primary.main : theme.palette.grey[400],
             boxShadow: theme.shadows[2],
         },
-
-        '& .MuiButton-startIcon': {
-            marginRight: 0,
-        }
     };
 });
 
 const GoogleLoginButton = () => {
+    const setToken = useUserStore((state) => state.setToken);
+
+    useEffect(() => {
+        // Define the listener inside useEffect so we can remove it on unmount
+        const handleMessage = (event: MessageEvent) => {
+            // Check origin for security
+            if (event.origin !== API_URL) return;
+
+            if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
+                const jwtToken = event.data.token;
+                setToken(jwtToken);
+
+                // Redirect to home - AuthProvider will fetch user automatically
+                window.location.href = '/';
+            }
+        };
+
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, [setToken]);
+
     const handleGoogleLogin = () => {
-        console.log("Redirecting to Google...");
+        const redirectUri = encodeURIComponent(`${API_URL}/api/identity/auth/signin-google`);
+        const scope = encodeURIComponent('profile email');
+        const stateData = {
+            origin: encodeURIComponent(window.location.origin),
+            apiUrl: API_URL
+        };
+        const statePayload = btoa(JSON.stringify(stateData));
+        const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&access_type=offline&prompt=consent&state=${statePayload}`;
+
+        const width = 500;
+        const height = 600;
+        const left = window.screenX + (window.outerWidth - width) / 2;
+        const top = window.screenY + (window.outerHeight - height) / 2;
+
+        const popup = window.open(
+            authUrl,
+            "google_login",
+            `width=${width},height=${height},left=${left},top=${top},status=no,location=no,toolbar=no,menubar=no`
+        );
+
+        if (popup) popup.focus();
     };
 
     return (

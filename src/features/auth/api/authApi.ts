@@ -10,6 +10,6 @@ export const apiAuthRegister = async (request: UserRegisterRequest) => {
     return response.data as boolean;
 }
 export const apiAuthGetLoginUser = async () => {
-    const response = await axiosClient.get<UserDto>('/api/identity/auth/getLoginUser');
+    const response = await axiosClient.post<UserDto>('/api/identity/auth/getLoginUser');
     return response.data as UserDto;
 }
