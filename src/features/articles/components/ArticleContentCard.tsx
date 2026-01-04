@@ -3,7 +3,9 @@ import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { Box, Typography, Link, Divider, useTheme } from '@mui/material';
-
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 type ArticleContentCardProps = {
     content: string;
 };
@@ -20,7 +22,8 @@ export const ArticleContentCard = ({ content }: ArticleContentCardProps) => {
             }}
         >
             <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeKatex]}
                 components={{
                     // Map H1 to MUI Typography
                     h1: ({ node, ...props }) => (
