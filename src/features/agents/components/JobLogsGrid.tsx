@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Chip,
     Paper,
     Typography
 } from '@mui/material';
@@ -30,7 +31,7 @@ export const JobLogsGrid: React.FC<JobLogsGridProps> = ({
         {
             field: 'jobLogId',
             headerName: 'ID',
-            width: 100,
+            width: 110,
             sortable: false
         },
         {
@@ -51,9 +52,7 @@ export const JobLogsGrid: React.FC<JobLogsGridProps> = ({
             width: 120,
             sortable: false,
             renderCell: (params) => (
-                <Typography variant="body2" fontWeight={500}>
-                    {params.value}
-                </Typography>
+                <Chip label={params.value} size="small" variant="outlined" />
             )
         },
         {
@@ -61,7 +60,7 @@ export const JobLogsGrid: React.FC<JobLogsGridProps> = ({
             headerName: 'AI Model',
             width: 300,
             sortable: false,
-            valueGetter: (_, row) => row.aiModel ? `${row.aiModel.provider} - ${row.aiModel.model}` : ''
+            valueGetter: (_, row) => row.aiModel ? `${row.aiModel.model}` : 'Not found'
         },
         {
             field: 'createdAt',

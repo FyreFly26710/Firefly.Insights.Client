@@ -5,15 +5,20 @@ import { aiModelsApi } from '../api/aiModelsApi';
 import { apiCategoriesGetLookupList, apiCategoriesGetTopicLookupListById } from '@/features/articles/api/categoriesApi';
 import type { GenerateArticleSummaryRequest, AiModelDto } from '../api-types';
 
+export type GenerateArticleSummaryFormValues = GenerateArticleSummaryRequest & {
+    provider: string;
+};
+
 export const useGenerateTopicArticles = () => {
     const { data: aiModels = [], isLoading: isLoadingModels, execute: fetchAiModels } = useAsync(aiModelsApi.getList);
     const { data: categories = [], isLoading: isLoadingCategories, execute: fetchCategories } = useAsync(apiCategoriesGetLookupList);
     const { data: topics = [], isLoading: isLoadingTopics, execute: fetchTopics } = useAsync(apiCategoriesGetTopicLookupListById);
 
-    const form = useForm<GenerateArticleSummaryRequest>({
+    const form = useForm<GenerateArticleSummaryFormValues>({
         defaultValues: {
             provider: '',
-            model: '',
+            // model: '',
+            aiModelId: 0,
             userPrompt: '',
             articleCount: 10,
             categoryId: undefined,
@@ -41,7 +46,7 @@ export const useGenerateTopicArticles = () => {
     const currentModelOptions = useMemo(() => {
         if (!watchedProvider) return [];
         return (groupedModels[watchedProvider] || []).map(m => ({
-            id: m.model,
+            id: m.aiModelId,
             name: m.model,
             description: `Output Price: $${m.outputPrice.toFixed(2)}; Input Price: $${m.inputPrice.toFixed(2)};`
         }));
@@ -65,7 +70,7 @@ export const useGenerateTopicArticles = () => {
     }, [watchedCategoryId, categories, fetchTopics, setValue]);
 
     useEffect(() => {
-        setValue('model', '');
+        setValue('aiModelId', 0);
     }, [watchedProvider, setValue]);
 
     return {

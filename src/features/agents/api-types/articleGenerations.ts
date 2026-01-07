@@ -1,6 +1,7 @@
 export type GenerateArticleSummaryRequest = {
-    provider: string;
-    model: string;
+    // provider: string;
+    // model: string;
+    aiModelId: number;
     userPrompt: string;
     articleCount: number;
     categoryId: number;

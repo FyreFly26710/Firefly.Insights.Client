@@ -4,6 +4,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import StorageIcon from '@mui/icons-material/Storage';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
+import KeyIcon from '@mui/icons-material/Key';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import Flex from '@/components/Elements/Flex/Flex';
 import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
@@ -35,6 +36,7 @@ export const AgentLayout = () => {
         { text: 'Execution Logs', path: '/agents/execution-logs', icon: <AssignmentIcon /> },
         { text: 'Job Logs', path: '/agents/job-logs', icon: <StorageIcon /> },
         { text: 'AI Models', path: '/agents/ai-models', icon: <SmartToyIcon /> },
+        { text: 'API Keys', path: '/agents/api-keys', icon: <KeyIcon /> },
         { text: 'Generate', path: '/agents/agents/generate', icon: <AutoFixHighIcon /> },
     ];
 

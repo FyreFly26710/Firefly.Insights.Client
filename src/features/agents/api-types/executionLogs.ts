@@ -20,3 +20,9 @@ export type ExecutionLogListRequest = PageInfo & {
     aiModelId?: number;
     isSuccessful?: boolean;
 }
+
+export type ExecutionPayloadDto = {
+    executionPayloadId: number;
+    prompt: string;
+    response: string;
+}

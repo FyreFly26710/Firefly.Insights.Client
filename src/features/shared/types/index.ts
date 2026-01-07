@@ -18,3 +18,9 @@ export interface Paged<T> {
     totalPages: number;
     data: T[];
 }
+export type UserTo = {
+    userId: number;
+    userName: string;
+    userAvatar: string;
+    userRole: string;
+}

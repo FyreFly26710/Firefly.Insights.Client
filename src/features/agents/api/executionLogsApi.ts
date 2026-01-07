@@ -1,5 +1,5 @@
 import { axiosClient } from "@/features/shared/utils/axiosClient";
-import type { ExecutionLogDto, ExecutionLogListRequest } from "../api-types";
+import type { ExecutionLogDto, ExecutionLogListRequest, ExecutionPayloadDto } from "../api-types";
 import type { Paged } from "@/features/shared";
 
 export const executionLogsApi = {
@@ -10,5 +10,12 @@ export const executionLogsApi = {
     getById: async (id: number) => {
         const response = await axiosClient.get(`/api/ai/execution-logs/${id}`);
         return response.data as ExecutionLogDto;
+    }
+}
+
+export const executionPayloadsApi = {
+    getById: async (id: number) => {
+        const response = await axiosClient.get(`/api/ai/execution-payloads/${id}`);
+        return response.data as ExecutionPayloadDto;
     }
 }

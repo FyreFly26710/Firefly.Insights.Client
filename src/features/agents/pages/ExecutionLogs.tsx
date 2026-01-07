@@ -1,63 +1,47 @@
-import { Container, Box} from '@mui/material';
-import { useExecutionLogsTable } from '../hooks/useExecutionLogsTable';
-import { ExecutionLogsGrid } from '../components/ExecutionLogsGrid';
-import { PageHeader } from '@/components/Header/PageHeader';
+import { Container, Box } from "@mui/material";
+import { useExecutionLogsTable } from "../hooks/useExecutionLogsTable";
+import { ExecutionLogsGrid } from "../components/ExecutionLogsGrid";
+import { PageHeader } from "@/components/Header/PageHeader";
+import { ExecutionJobDrawer } from "../components/ExecutionJobDrawer";
 
 export const ExecutionLogs = () => {
-    const {
-        executionLogs,
-        totalCount,
-        isLoading,
-        query,
-        updateQuery
-    } = useExecutionLogsTable();
+  const {
+    executionLogs,
+    totalCount,
+    isLoading,
+    query,
+    updateQuery,
+    selectedLog,
+    isDrawerOpen,
+    handleRowDoubleClick,
+    closeDrawer,
+  } = useExecutionLogsTable();
 
-    // const [userIdFilter, setUserIdFilter] = useState<string>('');
-    // const [aiModelIdFilter, setAiModelIdFilter] = useState<string>('');
-    // const [isSuccessfulFilter, setIsSuccessfulFilter] = useState<boolean | undefined>(undefined);
+  return (
+    <Container
+      id="execution-logs-page"
+      component="main"
+      maxWidth="xl"
+      sx={{ py: 2, height: "100%", display: "flex", flexDirection: "column" }}
+    >
+      <PageHeader title="Execution Logs" />
+      {/* Grid */}
+      <Box sx={{ flex: 1, minHeight: 0 }}>
+        <ExecutionLogsGrid
+          executionLogs={executionLogs}
+          totalCount={totalCount}
+          isLoading={isLoading}
+          query={query}
+          onQueryChange={updateQuery}
+          onRowDoubleClick={handleRowDoubleClick}
+        />
+      </Box>
 
-    // const handleUserIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const value = event.target.value;
-    //     setUserIdFilter(value);
-    //     updateQuery({
-    //         userId: value ? parseInt(value, 10) : undefined
-    //     });
-    // };
-
-    // const handleAiModelIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const value = event.target.value;
-    //     setAiModelIdFilter(value);
-    //     updateQuery({
-    //         aiModelId: value ? parseInt(value, 10) : undefined
-    //     });
-    // };
-
-    // const handleIsSuccessfulChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     const checked = event.target.checked;
-    //     setIsSuccessfulFilter(checked ? true : undefined);
-    //     updateQuery({
-    //         isSuccessful: checked ? true : undefined
-    //     });
-    // };
-
-    return (
-        <Container
-            id="execution-logs-page"
-            component="main"
-            maxWidth="xl"
-            sx={{ py: 2, height: '100%', display: 'flex', flexDirection: 'column' }}
-        >
-            <PageHeader title="Execution Logs" />
-            {/* Grid */}
-            <Box sx={{ flex: 1, minHeight: 0 }}>
-                <ExecutionLogsGrid
-                    executionLogs={executionLogs}
-                    totalCount={totalCount}
-                    isLoading={isLoading}
-                    query={query}
-                    onQueryChange={updateQuery}
-                />
-            </Box>
-        </Container>
-    );
+      <ExecutionJobDrawer
+        open={isDrawerOpen}
+        onClose={closeDrawer}
+        selectedLog={selectedLog}
+      />
+    </Container>
+  );
 };
