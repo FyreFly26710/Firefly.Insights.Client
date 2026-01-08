@@ -19,33 +19,22 @@ export const ArticleHeaderCard = ({ title, description, userName, userAvatar, ta
                 borderColor: 'divider',
                 bgcolor: 'background.paper',
                 overflow: 'hidden',
-                flexShrink: 0
-
+                flexShrink: 0,
+                paddingBottom: 0,
             }}
         >
             <CardContent sx={{ padding: '8px 16px' }}>
-                <Flex justify="space-between" >
+                <Flex justify="space-between">
                     <Flex direction="column" gap={1}>
                         {/* Title */}
-                        <Typography
-                            variant="h4"
-                            component="h1"
-                            gutterBottom
-                            sx={{ fontWeight: 800, color: 'text.primary' }}
-                        >
+                        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 800, color: 'text.primary' }}>
                             {title}
                         </Typography>
                         <Flex justify="space-between">
                             {/* Tags Section */}
                             <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
                                 {tags.map((tag) => (
-                                    <Chip
-                                        key={tag}
-                                        label={tag}
-                                        size="small"
-                                        variant="outlined"
-                                        sx={{ fontWeight: 500, borderRadius: 1.5 }}
-                                    />
+                                    <Chip key={tag} label={tag} size="small" variant="outlined" sx={{ fontWeight: 500, borderRadius: 1.5 }} />
                                 ))}
                             </Stack>
                             {/* Author Info */}
@@ -63,14 +52,9 @@ export const ArticleHeaderCard = ({ title, description, userName, userAvatar, ta
                 </Flex>
 
                 {/* Description */}
-                <Typography
-                    variant="body1"
-                    sx={{ color: 'text.secondary', mb: 3, lineHeight: 1.6 }}
-                >
+                <Typography variant="body1" sx={{ color: 'text.secondary', mb: 0.5, lineHeight: 1.6, paddingBottom: 0 }}>
                     {description}
                 </Typography>
-
-
             </CardContent>
         </Card>
     );

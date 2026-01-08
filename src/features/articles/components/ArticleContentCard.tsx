@@ -12,12 +12,12 @@ type ArticleContentCardProps = {
 
 export const ArticleContentCard = ({ content }: ArticleContentCardProps) => {
     const theme = useTheme();
-    const isLight = theme.palette.mode === "light";
+    const isLight = theme.palette.mode === 'light';
 
     return (
         <Box
             sx={{
-                p: 3,
+                p: 0,
                 width: '100%',
                 // overflowY: 'auto',
                 margin: '0 auto',
@@ -52,19 +52,15 @@ export const ArticleContentCard = ({ content }: ArticleContentCardProps) => {
                                 fontStyle: 'italic',
                                 color: isLight ? 'text.secondary' : 'text.primary',
                                 borderRadius: '0 4px 4px 0',
-                                '& p': { m: 0 }
+                                '& p': { m: 0 },
                             }}
                             {...props}
                         />
                     ),
                     // Map paragraphs
-                    p: ({ node, ...props }) => (
-                        <Typography variant="body1" sx={{ mb: 2, color: 'text.secondary', lineHeight: 1.7 }} {...props} />
-                    ),
+                    p: ({ node, ...props }) => <Typography variant="body1" sx={{ mb: 2, color: 'text.secondary', lineHeight: 1.7 }} {...props} />,
                     // Map links to MUI Link
-                    a: ({ node, ...props }) => (
-                        <Link underline="hover" color="primary" {...props} />
-                    ),
+                    a: ({ node, ...props }) => <Link underline="hover" color="primary" {...props} />,
                     // Divider for horizontal rules
                     hr: () => <Divider sx={{ my: 4 }} />,
                     // Modern Syntax Highlighting for code blocks
@@ -72,7 +68,7 @@ export const ArticleContentCard = ({ content }: ArticleContentCardProps) => {
                     code({ node, className, children, ...props }: any) {
                         return <Code node={node} className={className} children={children} {...props} />;
                     },
-                    ...MdTable
+                    ...MdTable,
                 }}
             >
                 {content}
