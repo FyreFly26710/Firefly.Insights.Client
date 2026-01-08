@@ -7,15 +7,15 @@ import { CategoryList } from "../components/CategoryList";
 const categoriesPromise = apiCategoriesGetList();
 
 export const CategoryListPage = () => {
-    const data = use(categoriesPromise);
+  const data = use(categoriesPromise);
 
-    const filteredCategories = useMemo(() => {
-        return (data ?? []).filter(cat => cat.categoryId !== -1);
-    }, [data]);
+  const filteredCategories = useMemo(() => {
+    return (data ?? []).filter((cat) => cat.categoryId !== -1);
+  }, [data]);
 
-    return (
-        <Container id="category-list-page">
-            <CategoryList categories={filteredCategories} />
-        </Container>
-    );
+  return (
+    <Container id="category-list-page" sx={{ overflow: "auto" }}>
+      <CategoryList categories={filteredCategories} />
+    </Container>
+  );
 };
