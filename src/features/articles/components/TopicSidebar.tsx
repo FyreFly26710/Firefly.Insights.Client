@@ -1,9 +1,9 @@
 import { Box, Typography, List, ListItem, ListItemText, Paper, ListItemButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import type { SidebarArticle } from "../types";
-import { Link } from 'react-router-dom';
+import type { SidebarArticle } from '../types';
+import { Link, useLocation } from 'react-router-dom';
 import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
-
+import { alpha } from '@mui/material/styles';
 type TopicSidebarProps = {
     topicId: number;
     name: string;
@@ -11,7 +11,7 @@ type TopicSidebarProps = {
     topicArticles: SidebarArticle[];
     isOpen: boolean;
     isLoading: boolean;
-}
+};
 
 const SidebarContainer = styled(Paper, {
     shouldForwardProp: (prop) => prop !== 'isOpen',
@@ -40,59 +40,78 @@ const HeaderImage = styled('img')({
     borderRadius: '4px',
     flexShrink: 0,
 });
-
 export const TopicSidebar = ({ isOpen, topicId, name, imageUrl, topicArticles, isLoading }: TopicSidebarProps) => {
+    const location = useLocation();
+
     return (
         <SidebarContainer id="topic-sidebar" elevation={0} isOpen={isOpen}>
-            {isLoading ? <PageSpinner /> : (
+            {isLoading ? (
+                <PageSpinner />
+            ) : (
                 <>
-                    <HeaderImage
-                        src={imageUrl || "https://ih1.redbubble.net/image.5582017600.4418/st,small,507x507-pad,600x600,f8f8f8.webp"}
-                        alt={name}
-                    />
+                    {imageUrl && <HeaderImage src={imageUrl} alt={name} />}
 
-                    <Box sx={{ mt: 2, flexShrink: 0 }}>
-                        <Typography variant="h6" component="h2" gutterBottom fontWeight="bold">
+                    <Box sx={{ px: 1, mt: 1, flexShrink: 0 }}>
+                        <Typography variant="overline" color="text.secondary" fontWeight="bold">
+                            Topic
+                        </Typography>
+                        <Typography variant="h6" component="h2" gutterBottom fontWeight="800" sx={{ lineHeight: 1.2 }}>
                             {name}
                         </Typography>
                     </Box>
 
-                    <List sx={{ width: '100%', mt: 1 }}>
-                        {topicArticles.map((article) => (
-                            <ListItem
-                                key={article.articleId}
-                                disablePadding
-                            >
-                                <ListItemButton
-                                    component={Link}
-                                    to={`/topics/${topicId}/articles/${article.articleId}`}
-                                    sx={{ p: 0 }}
-                                >
-                                    <ListItemText
-                                        primary={article.title}
-                                        title={article.title}
-                                        slotProps={{
-                                            primary: {
-                                                variant: 'subtitle2',
+                    <List sx={{ width: '100%', mt: 1, px: 1 }}>
+                        {topicArticles.map((article) => {
+                            const targetPath = `/topics/${topicId}/articles/${article.articleId}`;
+                            const isSelected = location.pathname === targetPath;
+
+                            return (
+                                <ListItem key={article.articleId} disablePadding sx={{ mb: 0.5 }}>
+                                    <ListItemButton
+                                        component={Link}
+                                        to={targetPath}
+                                        selected={isSelected}
+                                        sx={{
+                                            borderRadius: '8px',
+                                            py: 0.5,
+                                            px: 1.5,
+                                            // Custom styling for the "Selected" state
+                                            '&.Mui-selected': {
+                                                backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.08),
                                                 color: 'primary.main',
-                                                noWrap: true,
-                                                sx: {
-                                                    minWidth: 0,
-                                                    overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    cursor: 'pointer',
-                                                    '&:hover': { textDecoration: 'underline' },
+                                                '&:hover': {
+                                                    backgroundColor: (theme) => alpha(theme.palette.primary.main, 0.12),
+                                                },
+                                                // Left "Active" indicator bar
+                                                '&::before': {
+                                                    content: '""',
+                                                    position: 'absolute',
+                                                    left: 0,
+                                                    height: '60%',
+                                                    width: '4px',
+                                                    borderRadius: '0 4px 4px 0',
+                                                    backgroundColor: 'primary.main',
                                                 },
                                             },
                                         }}
-                                    />
-                                </ListItemButton>
-
-                            </ListItem>
-                        ))}
+                                    >
+                                        <ListItemText
+                                            primary={article.title}
+                                            slotProps={{
+                                                primary: {
+                                                    variant: 'body2',
+                                                    fontWeight: isSelected ? 600 : 400,
+                                                    noWrap: true,
+                                                },
+                                            }}
+                                        />
+                                    </ListItemButton>
+                                </ListItem>
+                            );
+                        })}
                     </List>
                 </>
             )}
         </SidebarContainer>
     );
-}
+};

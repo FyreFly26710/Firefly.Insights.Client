@@ -1,12 +1,12 @@
-import { useParams } from "react-router-dom";
-import { useAsync } from "@/features/shared/hooks/useAsync ";
-import { apiArticlesGetById } from "../api";
-import { useEffect } from "react";
-import { ErrorPageLayout } from "@/layouts/ErrorPageLayout";
-import { ArticleHeaderCard } from "../components/ArticleHeaderCard";
-import { ArticleContentCard } from "../components/ArticleContentCard";
-import { PageSpinner } from "@/components/Elements/Spinner/PageSpinner";
-import { Box, styled } from "@mui/material";
+import { useParams } from 'react-router-dom';
+import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { apiArticlesGetById } from '../api';
+import { useEffect } from 'react';
+import { ErrorPageLayout } from '@/layouts/ErrorPageLayout';
+import { ArticleHeaderCard } from '../components/ArticleHeaderCard';
+import { ArticleContentCard } from '../components/ArticleContentCard';
+import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
+import { Box, styled } from '@mui/material';
 
 const ArticlePageContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -16,7 +16,6 @@ const ArticlePageContainer = styled(Box)(({ theme }) => ({
     width: '100%',
     overflowY: 'auto',
     overflowX: 'hidden',
-
 }));
 
 export const ArticlePage = () => {
@@ -33,13 +32,21 @@ export const ArticlePage = () => {
     }
 
     if (error || !data) {
-        return <ErrorPageLayout title="Error" message={error?.message ?? "Failed to load article"} />;
+        return <ErrorPageLayout title="Error" message={error?.message ?? 'Failed to load article'} />;
     }
 
     return (
         <ArticlePageContainer id="article-page">
-            <ArticleHeaderCard title={data.title} description={data.description} userName={data.userName} userAvatar={data.userAvatar} tags={data.tags.map(t => t.name)} />
+            {!data.isTopicSummary && (
+                <ArticleHeaderCard
+                    title={data.title}
+                    description={data.description}
+                    userName={data.userName}
+                    userAvatar={data.userAvatar}
+                    tags={data.tags.map((t) => t.name)}
+                />
+            )}
             <ArticleContentCard content={data.content} />
         </ArticlePageContainer>
     );
-}
+};
