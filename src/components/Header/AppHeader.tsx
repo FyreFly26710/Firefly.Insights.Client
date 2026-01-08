@@ -1,11 +1,8 @@
-
 import { NavLink, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.svg";
 import { APP_TITLE } from "@/config";
 
-import {
-  Typography, IconButton, Tabs, Tab
-} from "@mui/material";
+import { Typography, IconButton, Tabs, Tab } from "@mui/material";
 import { useTheme, type Theme } from "@mui/material/styles";
 
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -20,9 +17,12 @@ import { useUserStore } from "@/stores/useUserStore";
 
 const StyledHeader = styled("div")`
   margin-bottom: 4px;
-  background-color: ${({ theme }: { theme: Theme }) => theme.palette.background.default};
-  border-bottom: 1px solid ${({ theme }: { theme: Theme }) => theme.palette.divider};
-  box-shadow: 0 0 10px 0 ${({ theme }: { theme: Theme }) => theme.palette.divider};
+  background-color: ${({ theme }: { theme: Theme }) =>
+    theme.palette.background.default};
+  border-bottom: 1px solid
+    ${({ theme }: { theme: Theme }) => theme.palette.divider};
+  box-shadow: 0 0 10px 0
+    ${({ theme }: { theme: Theme }) => theme.palette.divider};
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,13 +53,15 @@ export function Header() {
 
   const isDark = theme.palette.mode === "dark";
   const { isAuthenticated, user } = useUserStore();
-  const isAdmin = isAuthenticated && user?.userRole === 'admin';
+  const isAdmin = isAuthenticated && user?.userRole === "admin";
 
-  const currentTab = NAV_TABS.find(tab =>
-    tab.to === '/'
-      ? location.pathname === '/'
-      : location.pathname.startsWith(tab.to)
-  )?.to;
+  const currentTab =
+    NAV_TABS.find((tab) =>
+      tab.to === "/"
+        ? location.pathname === "/"
+        : location.pathname.startsWith(tab.to)
+    )?.to ?? false; 
+    
   return (
     <StyledHeader id="layout-header" theme={theme}>
       <Flex id="layout-header-left" gap={24}>
@@ -70,20 +72,26 @@ export function Header() {
           </Typography>
         </StyledNavLink>
 
-        <Tabs
-          value={currentTab}
-          textColor="primary"
-          indicatorColor="primary"
-        >
+        <Tabs value={currentTab} textColor="primary" indicatorColor="primary">
           {NAV_TABS.map((tab) => (
-            <Tab key={tab.to} label={tab.label} value={tab.to} to={tab.to} component={NavLink} />
+            <Tab
+              key={tab.to}
+              label={tab.label}
+              value={tab.to}
+              to={tab.to}
+              component={NavLink}
+            />
           ))}
         </Tabs>
         {isAdmin && <AdminMenu />}
       </Flex>
 
       <Flex id="layout-header-right" gap={12} align="center" width="auto">
-        <IconButton onClick={toggleMode} color="inherit" aria-label="Toggle theme">
+        <IconButton
+          onClick={toggleMode}
+          color="inherit"
+          aria-label="Toggle theme"
+        >
           {isDark ? <LightModeIcon /> : <DarkModeIcon />}
         </IconButton>
 

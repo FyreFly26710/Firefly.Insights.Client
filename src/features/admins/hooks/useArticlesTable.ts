@@ -15,25 +15,32 @@ export const useArticlesTable = () => {
     });
 
     const { data, isLoading, execute } = useAsync(apiArticlesGetList);
+    const [cachedTotalCount, setCachedTotalCount] = useState(0);
+    useEffect(() => {
+        if (data?.totalCount !== undefined) {
+            setTimeout(() => {
+                setCachedTotalCount(data.totalCount);
+            }, 0);
+        }
+    }, [data?.totalCount]);
 
     useEffect(() => {
         execute(query);
     }, [query, execute]);
 
     const updateQuery = (updates: Partial<ArticleListRequest>) => {
-        setQuery((prev) => ({
+        setQuery(prev => ({
             ...prev,
             ...updates,
-            pageNumber: updates.pageNumber ?? (Object.keys(updates).some(k => !['pageNumber', 'pageSize', 'sortField', 'isAscending'].includes(k)) ? 1 : prev.pageNumber)
         }));
     };
-
+    
     const refresh = () => execute(query);
 
     return {
         // Data & State
         articles: data?.data ?? [],
-        totalCount: data?.totalCount ?? 0,
+        totalCount: data?.totalCount ?? cachedTotalCount, 
         isLoading,
         query,
 

@@ -15,11 +15,22 @@ axiosClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    console.log(
+      `[Request] ${config.method?.toUpperCase()} -> ${config.url}`,
+      {
+        params: config.params,
+        data: config.data,
+      }
+    );
+
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    console.error('[Request Error]', error);
+    return Promise.reject(error);
+  }
 );
-
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
