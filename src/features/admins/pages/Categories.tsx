@@ -9,7 +9,7 @@ import { CategoryFilters } from '../components/categories/CategoryFilters';
 import { CategoryFormDrawer } from '../components/categories/CategoryFormDrawer';
 import { FormNotification } from '../components/common/FormNotification';
 import { DeleteDialog } from '../components/common/DeleteDialog';
-import { apiCategoriesDelete } from '@/features/articles/api';
+import { categoriesApi } from '@/features/articles/api/categoriesApi';
 import { PageHeader } from '@/components/Header/PageHeader';
 
 export const Categories = () => {
@@ -75,7 +75,7 @@ export const Categories = () => {
         if (!categoryToDelete) return;
 
         try {
-            await apiCategoriesDelete(categoryToDelete.id);
+            await categoriesApi.delete(categoryToDelete.id);
             notify('Category deleted successfully', 'success');
             refresh();
         } catch (error) {

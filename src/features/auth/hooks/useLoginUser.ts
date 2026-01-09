@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import type { UserDto, UserLoginRequest } from '../types';
-import { apiAuthLogin } from '../api';
+import { authApi } from '../api/authApi';
 import type { AxiosError } from 'axios';
 import { useUserStore } from '@/stores/useUserStore';
 
@@ -32,7 +32,7 @@ export const useLoginUser = ({ defaultValues, onSuccess }: UseLoginUserProps = {
             setError(null);
 
             try {
-                const data = await apiAuthLogin(values);
+                const data = await authApi.login(values);
                 
                 setAuth(data.user, data.token);
                 onSuccess?.(data.user);

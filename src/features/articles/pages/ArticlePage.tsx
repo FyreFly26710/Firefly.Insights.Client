@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
-import { apiArticlesGetById } from '../api';
+import { articlesApi } from '../api/articlesApi';
 import { useEffect } from 'react';
 import { ErrorPageLayout } from '@/layouts/ErrorPageLayout';
 import { ArticleHeaderCard } from '../components/ArticleHeaderCard';
@@ -21,7 +21,7 @@ const ArticlePageContainer = styled(Box)(({ theme }) => ({
 
 export const ArticlePage = () => {
     const { articleId } = useParams();
-    const { data, isLoading, error, execute } = useAsync(apiArticlesGetById);
+    const { data, isLoading, error, execute } = useAsync(articlesApi.getById);
     const theme = useTheme();
     useEffect(() => {
         if (articleId) {

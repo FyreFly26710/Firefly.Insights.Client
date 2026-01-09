@@ -2,7 +2,7 @@ import { useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
 import { aiModelsApi } from '../api/aiModelsApi';
-import { apiCategoriesGetLookupList, apiCategoriesGetTopicLookupListById } from '@/features/articles/api/categoriesApi';
+import { categoriesApi } from '@/features/articles/api/';
 import type { GenerateArticleSummaryRequest, AiModelDto } from '../api-types';
 
 export type GenerateArticleSummaryFormValues = GenerateArticleSummaryRequest & {
@@ -11,8 +11,8 @@ export type GenerateArticleSummaryFormValues = GenerateArticleSummaryRequest & {
 
 export const useGenerateTopicArticles = () => {
     const { data: aiModels = [], isLoading: isLoadingModels, execute: fetchAiModels } = useAsync(aiModelsApi.getList);
-    const { data: categories = [], isLoading: isLoadingCategories, execute: fetchCategories } = useAsync(apiCategoriesGetLookupList);
-    const { data: topics = [], isLoading: isLoadingTopics, execute: fetchTopics } = useAsync(apiCategoriesGetTopicLookupListById);
+    const { data: categories = [], isLoading: isLoadingCategories, execute: fetchCategories } = useAsync(categoriesApi.getLookupList);
+    const { data: topics = [], isLoading: isLoadingTopics, execute: fetchTopics } = useAsync(categoriesApi.getTopicLookupListById);
 
     const form = useForm<GenerateArticleSummaryFormValues>({
         defaultValues: {

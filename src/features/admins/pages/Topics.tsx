@@ -9,7 +9,7 @@ import { TopicFilters } from '../components/topics/TopicFilters';
 import { TopicFormDrawer } from '../components/topics/TopicFormDrawer';
 import { FormNotification } from '../components/common/FormNotification';
 import { DeleteDialog } from '../components/common/DeleteDialog';
-import { apiTopicsDelete } from '@/features/articles/api';
+import { topicsApi } from '@/features/articles/api/topicsApi';
 import { PageHeader } from '@/components/Header/PageHeader';
 
 export const Topics = () => {
@@ -65,7 +65,7 @@ export const Topics = () => {
         if (!topicToDelete) return;
 
         try {
-            await apiTopicsDelete(topicToDelete.id);
+            await topicsApi.delete(topicToDelete.id);
             notify('Topic deleted successfully', 'success');
             refresh();
         } catch (error) {

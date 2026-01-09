@@ -1,7 +1,7 @@
 import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
 import { useEffect, useState } from 'react';
 import { useUserStore } from '@/stores/useUserStore';
-import { apiAuthGetLoginUser } from '../api';
+import { authApi } from '../api/authApi';
 
 type AuthProviderProps = {
     children: React.ReactNode;
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             // If we have a token but no user, fetch the user
             if (token && !user) {
                 try {
-                    const userData = await apiAuthGetLoginUser();
+                    const userData = await authApi.getLoginUser();
                     setAuth(userData, token);
                 } catch (error) {
                     // If fetching user fails, remove the token

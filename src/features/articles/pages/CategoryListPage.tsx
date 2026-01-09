@@ -1,10 +1,10 @@
 import { use, useMemo } from "react";
 import { Container } from "@mui/material";
-import { apiCategoriesGetList } from "../api";
+import { categoriesApi } from "../api/categoriesApi";
 import { CategoryList } from "../components/CategoryList";
 
 // Fetch starts immediately when the module loads
-const categoriesPromise = apiCategoriesGetList();
+const categoriesPromise = categoriesApi.getList();
 
 export const CategoryListPage = () => {
   const data = use(categoriesPromise);

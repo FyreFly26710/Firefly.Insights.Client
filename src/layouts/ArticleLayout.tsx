@@ -2,7 +2,7 @@ import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import Flex from '@/components/Elements/Flex/Flex';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
-import { apiTopicsGetById } from '@/features/articles/api';
+import { topicsApi } from '@/features/articles/api/topicsApi';
 import { TopicSidebar } from '@/features/articles/components/TopicSidebar';
 import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
 import { ErrorPageLayout } from './ErrorPageLayout';
@@ -13,7 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 export const ArticleLayout = () => {
     const { topicId } = useParams();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const { data, isLoading, error, execute } = useAsync(apiTopicsGetById);
+    const { data, isLoading, error, execute } = useAsync(topicsApi.getById);
 
     useEffect(() => {
         if (topicId) {

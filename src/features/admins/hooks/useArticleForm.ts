@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-    apiArticlesGetById,
-    apiArticlesCreate,
-    apiArticlesUpdate,
-    apiTopicsGetLookupList,
+    articlesApi,
+    topicsApi,
 } from '@/features/articles/api';
 import type { ArticleCreateRequest, ArticleUpdateRequest } from '@/features/articles/api-types';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
@@ -18,10 +16,10 @@ export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) =>
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Topics lookup list
-    const { data: topics, isLoading: isLoadingTopics, execute: fetchTopics } = useAsync(apiTopicsGetLookupList);
+    const { data: topics, isLoading: isLoadingTopics, execute: fetchTopics } = useAsync(topicsApi.getLookupList);
 
     // Article details
-    const { data: articleData, isLoading, execute: fetchArticle } = useAsync(apiArticlesGetById);
+    const { data: articleData, isLoading, execute: fetchArticle } = useAsync(articlesApi.getById);
 
     // Initialize React Hook Form
     const form = useForm<ArticleCreateRequest>({
@@ -92,10 +90,10 @@ export const useArticleForm = ({ articleId, onSuccess }: UseArticleFormProps) =>
                     articleId,
                     ...values,
                 };
-                await apiArticlesUpdate(articleId, updateRequest);
+                await articlesApi.update(articleId, updateRequest);
             } else {
                 // Create Mode
-                await apiArticlesCreate(values);
+                await articlesApi.create(values);
             }
             onSuccess();
         } catch (error) {

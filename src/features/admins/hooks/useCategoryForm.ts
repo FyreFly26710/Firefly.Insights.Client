@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-    apiCategoriesGetById,
-    apiCategoriesCreate,
-    apiCategoriesUpdate,
-    apiTopicsGetLookupList,
+    categoriesApi,
+    topicsApi,
 } from '@/features/articles/api';
 import type { CategoryCreateRequest, CategoryUpdateRequest } from '@/features/articles/api-types';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
@@ -18,10 +16,10 @@ export const useCategoryForm = ({ categoryId, onSuccess }: UseCategoryFormProps)
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Topics lookup list
-    const { data: topics, isLoading: isLoadingTopics, execute: fetchTopics } = useAsync(apiTopicsGetLookupList);
+    const { data: topics, isLoading: isLoadingTopics, execute: fetchTopics } = useAsync(topicsApi.getLookupList);
 
     // Category details
-    const { data: categoryData, isLoading, execute: fetchCategory } = useAsync(apiCategoriesGetById);
+    const { data: categoryData, isLoading, execute: fetchCategory } = useAsync(categoriesApi.getById);
 
     // Initialize React Hook Form
     const form = useForm<CategoryUpdateRequest>({
@@ -87,7 +85,7 @@ export const useCategoryForm = ({ categoryId, onSuccess }: UseCategoryFormProps)
         try {
             if (categoryId) {
                 // Update Mode
-                await apiCategoriesUpdate(categoryId, values);
+                await categoriesApi.update(categoryId, values);
             } else {
                 // Create Mode
                 const createRequest: CategoryCreateRequest = {
@@ -97,7 +95,7 @@ export const useCategoryForm = ({ categoryId, onSuccess }: UseCategoryFormProps)
                     sortNumber: values.sortNumber ?? 0,
                     isHidden: values.isHidden ?? false,
                 };
-                await apiCategoriesCreate(createRequest);
+                await categoriesApi.create(createRequest);
             }
             onSuccess();
         } catch (error) {

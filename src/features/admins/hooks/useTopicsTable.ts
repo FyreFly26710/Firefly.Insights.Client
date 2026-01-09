@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiTopicsGetList } from '@/features/articles/api';
+import { topicsApi } from '@/features/articles/api/topicsApi';
 import type { TopicListRequest } from '@/features/articles/api-types';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
 
@@ -11,7 +11,7 @@ export const useTopicsTable = () => {
         isAscending: false,
     });
 
-    const { data, isLoading, execute } = useAsync(apiTopicsGetList);
+    const { data, isLoading, execute } = useAsync(topicsApi.getList);
 
     useEffect(() => {
         execute(query);

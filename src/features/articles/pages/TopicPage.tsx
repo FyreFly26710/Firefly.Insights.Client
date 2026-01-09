@@ -1,13 +1,13 @@
 import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
 import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import { apiTopicsGetSummaryArticleId } from '../api/topicsApi';
+import { topicsApi } from '../api/topicsApi';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
 import { ErrorPageLayout } from '@/layouts/ErrorPageLayout';
 
 export const TopicPage = () => {
     const { topicId } = useParams();
-    const { data, isLoading, error, execute } = useAsync(apiTopicsGetSummaryArticleId);
+    const { data, isLoading, error, execute } = useAsync(topicsApi.getSummaryArticleId);
     useEffect(() => {
         if (topicId) {
             execute(Number(topicId));

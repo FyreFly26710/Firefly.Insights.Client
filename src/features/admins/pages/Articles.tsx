@@ -9,19 +9,12 @@ import { ArticleFilters } from '../components/articles/ArticleFilters';
 import { ArticleFormDrawer } from '../components/articles/ArticleFormDrawer';
 import { FormNotification } from '../components/common/FormNotification';
 import { DeleteDialog } from '../components/common/DeleteDialog';
-import { apiArticlesDelete } from '@/features/articles/api';
+import { articlesApi } from '@/features/articles/api/articlesApi';
 import { PageHeader } from '@/components/Header/PageHeader';
 
 export const Articles = () => {
     // Data Engine Hook (Handles API fetch, pagination, sorting, filtering)
-    const {
-        articles,
-        totalCount,
-        isLoading,
-        query,
-        updateQuery,
-        refresh
-    } = useArticlesTable();
+    const { articles, totalCount, isLoading, query, updateQuery, refresh } = useArticlesTable();
 
     // UI State for Dialogs and Drawers
     const [selectedArticleId, setSelectedArticleId] = useState<number | null>(null);
@@ -55,7 +48,7 @@ export const Articles = () => {
     };
 
     const handleDeleteClick = (id: number) => {
-        const article = articles.find(a => a.articleId === id);
+        const article = articles.find((a) => a.articleId === id);
         if (article) {
             setArticleToDelete({ id: article.articleId, title: article.title });
         }
@@ -64,7 +57,7 @@ export const Articles = () => {
         if (!articleToDelete) return;
 
         try {
-            await apiArticlesDelete(articleToDelete.id);
+            await articlesApi.delete(articleToDelete.id);
             notify('Article deleted successfully', 'success');
             refresh();
         } catch (error) {
@@ -95,10 +88,7 @@ export const Articles = () => {
                 }
             />
 
-            <ArticleFilters
-                query={query}
-                onFilterChange={updateQuery}
-            />
+            <ArticleFilters query={query} onFilterChange={updateQuery} />
 
             <ArticleTable
                 articles={articles}
@@ -110,12 +100,7 @@ export const Articles = () => {
                 onDelete={handleDeleteClick}
             />
 
-            <ArticleFormDrawer
-                open={isFormOpen}
-                articleId={selectedArticleId}
-                onClose={() => setIsFormOpen(false)}
-                onSuccess={handleFormSuccess}
-            />
+            <ArticleFormDrawer open={isFormOpen} articleId={selectedArticleId} onClose={() => setIsFormOpen(false)} onSuccess={handleFormSuccess} />
 
             <DeleteDialog
                 open={Boolean(articleToDelete)}
@@ -125,10 +110,7 @@ export const Articles = () => {
                 onConfirmFn={handleDeleteConfirm}
             />
 
-            <FormNotification
-                {...notification}
-                onClose={() => setNotification(prev => ({ ...prev, open: false }))}
-            />
+            <FormNotification {...notification} onClose={() => setNotification((prev) => ({ ...prev, open: false }))} />
         </Container>
     );
 };

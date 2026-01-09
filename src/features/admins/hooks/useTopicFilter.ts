@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { apiCategoriesGetLookupList } from '@/features/articles/api';
+import { categoriesApi } from '@/features/articles/api/categoriesApi';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
 
 export const useTopicFilter = () => {
-    const { data: categories, isLoading, execute } = useAsync(apiCategoriesGetLookupList);
+    const { data: categories, isLoading, execute } = useAsync(categoriesApi.getLookupList);
 
     useEffect(() => {
         execute();

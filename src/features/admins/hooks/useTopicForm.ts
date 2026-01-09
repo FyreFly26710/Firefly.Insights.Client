@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import {
-    apiTopicsGetById,
-    apiTopicsCreate,
-    apiTopicsUpdate,
-    apiCategoriesGetLookupList,
+    topicsApi,
+    categoriesApi,
 } from '@/features/articles/api';
 import type { TopicCreateRequest, TopicUpdateRequest } from '@/features/articles/api-types';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
@@ -18,10 +16,10 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Categories lookup list
-    const { data: categories, isLoading: isLoadingCategories, execute: fetchCategories } = useAsync(apiCategoriesGetLookupList);
+    const { data: categories, isLoading: isLoadingCategories, execute: fetchCategories } = useAsync(categoriesApi.getLookupList);
 
     // Topic details
-    const { data: topicData, isLoading, execute: fetchTopic } = useAsync(apiTopicsGetById);
+    const { data: topicData, isLoading, execute: fetchTopic } = useAsync(topicsApi.getById);
 
     // Initialize React Hook Form
     const form = useForm<TopicUpdateRequest>({
@@ -83,7 +81,7 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
         try {
             if (topicId) {
                 // Update Mode
-                await apiTopicsUpdate(topicId, values);
+                await topicsApi.update(topicId, values);
             } else {
                 // Create Mode
                 const createRequest: TopicCreateRequest = {
@@ -94,7 +92,7 @@ export const useTopicForm = ({ topicId, onSuccess }: UseTopicFormProps) => {
                     sortNumber: values.sortNumber ?? 0,
                     isHidden: values.isHidden ?? false,
                 }
-                await apiTopicsCreate(createRequest);
+                await topicsApi.create(createRequest);
             }
             onSuccess();
         } catch (error) {

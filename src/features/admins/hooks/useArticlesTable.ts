@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiArticlesGetList } from '@/features/articles/api';
+import { articlesApi } from '@/features/articles/api/articlesApi';
 import type { ArticleListRequest } from '@/features/articles/api-types';
 import { useAsync } from '@/features/shared/hooks/useAsync ';
 
@@ -14,7 +14,7 @@ export const useArticlesTable = () => {
         // isHidden: undefined,
     });
 
-    const { data, isLoading, execute } = useAsync(apiArticlesGetList);
+    const { data, isLoading, execute } = useAsync(articlesApi.getList);
     const [cachedTotalCount, setCachedTotalCount] = useState(0);
     useEffect(() => {
         if (data?.totalCount !== undefined) {
