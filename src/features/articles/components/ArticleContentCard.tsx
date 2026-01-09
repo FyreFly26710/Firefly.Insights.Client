@@ -17,7 +17,7 @@ export const ArticleContentCard = ({ content }: ArticleContentCardProps) => {
     return (
         <Box
             sx={{
-                p: 0,
+                p: 2,
                 width: '100%',
                 // overflowY: 'auto',
                 margin: '0 auto',

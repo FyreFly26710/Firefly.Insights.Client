@@ -1,5 +1,5 @@
 import { axiosClient } from '@/features/shared/utils/axiosClient';
-import type { TopicDto, PagedTopicDto, TopicListRequest, TopicCreateRequest, TopicUpdateRequest } from '../api-types';
+import type { TopicDto, PagedTopicDto, TopicListRequest, TopicCreateRequest, TopicUpdateRequest, ArticleDto } from '../api-types';
 import type { LookupItemDto } from '@/features/shared/types';
 
 export const apiTopicsGetList = async (request: TopicListRequest) => {
@@ -29,4 +29,8 @@ export const apiTopicsUpdate = async (topicId: number, request: TopicUpdateReque
 export const apiTopicsDelete = async (topicId: number) => {
     const response = await axiosClient.delete(`/api/contents/topics/${topicId}`);
     return response.data as boolean;
+}
+export const apiTopicsGetSummaryArticleId = async (topicId: number) => {
+    const response = await axiosClient.get(`/api/contents/topics/${topicId}/summary-article-id`);
+    return response.data as number;
 }

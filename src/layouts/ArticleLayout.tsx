@@ -24,16 +24,13 @@ export const ArticleLayout = () => {
     const topicArticles: SidebarArticle[] = useMemo(() => {
         if (!data) return [];
 
-        return (
-            data.topicArticles
-                .filter((article) => !article.isHidden)
-                // .filter((article) => !article.isTopicSummary)
-                .sort((a, b) => a.sortNumber - b.sortNumber)
-                .map((article) => ({
-                    articleId: article.articleId,
-                    title: article.title,
-                }))
-        );
+        return data.topicArticles
+            .filter((article) => !article.isHidden && !article.isTopicSummary)
+            .sort((a, b) => a.sortNumber - b.sortNumber)
+            .map((article) => ({
+                articleId: article.articleId,
+                title: article.title,
+            }));
     }, [data]);
 
     if (error) {

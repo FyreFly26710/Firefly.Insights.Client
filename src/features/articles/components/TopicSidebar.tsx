@@ -1,7 +1,7 @@
 import { Box, Typography, List, ListItem, ListItemText, Paper, ListItemButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import type { SidebarArticle } from '../types';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
 import { alpha } from '@mui/material/styles';
 type TopicSidebarProps = {
@@ -51,7 +51,7 @@ export const TopicSidebar = ({ isOpen, topicId, name, imageUrl, topicArticles, i
                 <>
                     {imageUrl && <HeaderImage src={imageUrl} alt={name} />}
 
-                    <Box sx={{ px: 1, mt: 1, flexShrink: 0 }}>
+                    <Box sx={{ px: 1, mt: 1, flexShrink: 0, textDecoration: 'none', color: 'inherit' }} component={NavLink} to={`/topics/${topicId}`}>
                         <Typography variant="overline" color="text.secondary" fontWeight="bold">
                             Topic
                         </Typography>

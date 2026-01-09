@@ -6,7 +6,7 @@ import { ErrorPageLayout } from '@/layouts/ErrorPageLayout';
 import { ArticleHeaderCard } from '../components/ArticleHeaderCard';
 import { ArticleContentCard } from '../components/ArticleContentCard';
 import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
-import { Box, styled, Typography } from '@mui/material';
+import { Box, styled, Typography, useTheme } from '@mui/material';
 
 const ArticlePageContainer = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -16,13 +16,13 @@ const ArticlePageContainer = styled(Box)(({ theme }) => ({
     width: '100%',
     overflowY: 'auto',
     overflowX: 'hidden',
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
 }));
 
 export const ArticlePage = () => {
     const { articleId } = useParams();
     const { data, isLoading, error, execute } = useAsync(apiArticlesGetById);
-
+    const theme = useTheme();
     useEffect(() => {
         if (articleId) {
             execute(Number(articleId));
@@ -39,7 +39,7 @@ export const ArticlePage = () => {
     return (
         <ArticlePageContainer id="article-page">
             {data.isTopicSummary ? (
-                <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 800, color: 'text.primary' }}>
+                <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 800, color: 'text.primary', padding: theme.spacing(2) }}>
                     {data.topicName}
                 </Typography>
             ) : (

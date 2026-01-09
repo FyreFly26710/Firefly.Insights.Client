@@ -23,7 +23,7 @@ export const ArticleHeaderCard = ({ title, description, userName, userAvatar, ta
                 paddingBottom: 0,
             }}
         >
-            <CardContent sx={{ padding: '8px 16px' }}>
+            <CardContent>
                 <Flex justify="space-between">
                     <Flex direction="column" gap={1}>
                         {/* Title */}
