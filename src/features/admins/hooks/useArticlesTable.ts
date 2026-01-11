@@ -16,14 +16,12 @@ export const useArticlesTable = () => {
 
     const { data, isLoading, execute } = useAsync(articlesApi.getList);
     const [cachedTotalCount, setCachedTotalCount] = useState(0);
-    useEffect(() => {
-        if (data?.totalCount !== undefined) {
-            setTimeout(() => {
-                setCachedTotalCount(data.totalCount);
-            }, 0);
-        }
-    }, [data?.totalCount]);
+    const totalCount = data?.totalCount ?? cachedTotalCount;
 
+    if (data?.totalCount !== undefined && data.totalCount !== cachedTotalCount) {
+        setCachedTotalCount(data.totalCount);
+    }
+    
     useEffect(() => {
         execute(query);
     }, [query, execute]);
@@ -40,7 +38,7 @@ export const useArticlesTable = () => {
     return {
         // Data & State
         articles: data?.data ?? [],
-        totalCount: data?.totalCount ?? cachedTotalCount, 
+        totalCount: totalCount, 
         isLoading,
         query,
 

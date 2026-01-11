@@ -16,7 +16,12 @@ export const useExecutionLogsTable = () => {
     // Drawer state
     const [selectedLog, setSelectedLog] = useState<ExecutionLogDto | null>(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [cachedTotalCount, setCachedTotalCount] = useState(0);
+    const totalCount = data?.totalCount ?? cachedTotalCount;
 
+    if (data?.totalCount !== undefined && data.totalCount !== cachedTotalCount) {
+        setCachedTotalCount(data.totalCount);
+    }
     useEffect(() => {
         execute(query);
     }, [query, execute]);
@@ -44,7 +49,7 @@ export const useExecutionLogsTable = () => {
     return {
         // Data & State
         executionLogs: data?.data ?? [],
-        totalCount: data?.totalCount ?? 0,
+        totalCount: totalCount,
         isLoading,
         query,
 

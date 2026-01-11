@@ -12,7 +12,12 @@ export const useJobLogsTable = () => {
     });
 
     const { data, isLoading, execute } = useAsync(jobLogsApi.getList);
+    const [cachedTotalCount, setCachedTotalCount] = useState(0);
+    const totalCount = data?.totalCount ?? cachedTotalCount;
 
+    if (data?.totalCount !== undefined && data.totalCount !== cachedTotalCount) {
+        setCachedTotalCount(data.totalCount);
+    }
     useEffect(() => {
         execute(query);
     }, [query, execute]);
@@ -30,7 +35,7 @@ export const useJobLogsTable = () => {
     return {
         // Data & State
         jobLogs: data?.data ?? [],
-        totalCount: data?.totalCount ?? 0,
+        totalCount: totalCount,
         isLoading,
         query,
 

@@ -3,7 +3,7 @@ import { Chip, Paper, Typography } from '@mui/material';
 import { DataGrid, type GridColDef, type GridPaginationModel, type GridSortModel } from '@mui/x-data-grid';
 import type { JobLogDto, JobLogListRequest } from '../api-types';
 import { StatusChip } from '@/components/Tags/StatusChip';
-
+import { format, parseISO } from 'date-fns';
 interface JobLogsGridProps {
     jobLogs: JobLogDto[];
     totalCount: number;
@@ -45,30 +45,30 @@ export const JobLogsGrid: React.FC<JobLogsGridProps> = ({ jobLogs, totalCount, i
         {
             field: 'aiModel',
             headerName: 'AI Model',
-            width: 300,
+            width: 200,
             sortable: false,
             valueGetter: (_, row) => (row.aiModel ? `${row.aiModel.model}` : 'Not found'),
         },
         {
             field: 'createdAt',
             headerName: 'Created At',
-            width: 110,
+            width: 180,
             sortable: false,
-            valueFormatter: (value) => (value ? new Date(value).toLocaleDateString() : ''),
+            valueFormatter: (value) => (value ? format(parseISO(value), 'MMM d, yyyy HH:mm:ss') : ''),
         },
         {
             field: 'startedAt',
             headerName: 'Started At',
-            width: 110,
+            width: 180,
             sortable: false,
-            valueFormatter: (value) => (value ? new Date(value).toLocaleDateString() : ''),
+            valueFormatter: (value) => (value ? format(parseISO(value), 'MMM d, yyyy HH:mm:ss') : ''),
         },
         {
             field: 'completedAt',
             headerName: 'Completed At',
-            width: 110,
+            width: 180,
             sortable: false,
-            valueFormatter: (value) => (value ? new Date(value).toLocaleDateString() : ''),
+            valueFormatter: (value) => (value ? format(parseISO(value), 'MMM d, yyyy HH:mm:ss') : ''),
         },
     ];
 
