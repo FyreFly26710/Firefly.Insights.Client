@@ -1,24 +1,15 @@
-import { useAsync } from '@/features/shared/hooks/useAsync';
-import { articlesApi } from '../api/articlesApi';
+import { Container } from '@mui/material';
+import { useArticles } from '../hooks/useArticles';
 import { ArticleGrid } from '../components/ArticleGrid';
-import { useEffect } from 'react';
-import { CircularProgress, Container } from '@mui/material';
-import { ErrorPageLayout } from '@/layouts/ErrorPageLayout';
+import { ArticlesFilter } from '../components/ArticlesFilter';
+import { PageHeader } from '@/components/Header/PageHeader';
+import { useMemo } from 'react';
 
 export const ArticlesPage = () => {
-    const { data, isLoading, error, execute } = useAsync(articlesApi.getList);
-    useEffect(() => {
-        execute({
-            pageNumber: 1,
-            pageSize: 25,
-            sortField: 'updatedAt',
-            isAscending: false,
-        });
-    }, [execute]);
-
-    if (isLoading) return <CircularProgress />;
-    if (error) return <ErrorPageLayout title="Error" message={error.message} />;
-
+    const { articles, totalCount, isLoading, query, updateQuery } = useArticles();
+    const filteredArticles = useMemo(() => {
+        return articles.filter((article) => article.isTopicSummary === false);
+    }, [articles]);
     return (
         <Container
             id="articles-page"
@@ -30,7 +21,11 @@ export const ArticlesPage = () => {
                 padding: '8px !important',
             }}
         >
-            <ArticleGrid pagedData={data!} isLoading={isLoading} />
+            <PageHeader title="Latest Articles" />
+
+            <ArticlesFilter query={query} onFilterChange={updateQuery} />
+
+            <ArticleGrid articles={filteredArticles} totalCount={totalCount} isLoading={isLoading} query={query} onQueryChange={updateQuery} />
         </Container>
     );
 };

@@ -1,9 +1,5 @@
-// import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 export function Home() {
-    return (
-        <>
-            HOME PAGE
-        </>
-    );
+    return <Navigate to="/articles" replace={true} />;
 }

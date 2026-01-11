@@ -1,25 +1,51 @@
 import React from 'react';
-import { Paper, useTheme } from '@mui/material';
-import { DataGrid, type GridColDef } from '@mui/x-data-grid';
-import type { PagedArticleDto, ArticleDto } from '@/features/articles/api-types';
+import { Paper, useTheme, Pagination, Box } from '@mui/material';
+import {
+    DataGrid,
+    type GridColDef,
+    type GridPaginationModel,
+    useGridApiContext,
+    useGridSelector,
+    gridPageSelector,
+    gridPageCountSelector,
+} from '@mui/x-data-grid';
+import type { ArticleDto, ArticleListRequest } from '@/features/articles/api-types';
 import { ArticleCard } from './ArticleCard';
 
 interface ArticleGridProps {
-    pagedData: PagedArticleDto | null;
-    isLoading?: boolean;
+    articles: ArticleDto[];
+    totalCount: number;
+    isLoading: boolean;
+    query: ArticleListRequest;
+    onQueryChange: (updates: Partial<ArticleListRequest>) => void;
 }
 
-export const ArticleGrid: React.FC<ArticleGridProps> = ({ pagedData, isLoading }) => {
+function CustomPagination() {
+    const apiRef = useGridApiContext();
+    const page = useGridSelector(apiRef, gridPageSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+    return (
+        <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+            <Pagination
+                color="primary"
+                shape="rounded"
+                count={pageCount}
+                page={page + 1}
+                onChange={(event, value) => apiRef.current.setPage(value - 1)}
+            />
+        </Box>
+    );
+}
+
+export const ArticleGrid: React.FC<ArticleGridProps> = ({ articles, totalCount, isLoading, query, onQueryChange }) => {
     const theme = useTheme();
     const isLight = theme.palette.mode === 'light';
-
-    if (!pagedData?.data) return null;
 
     const columns: GridColDef<ArticleDto>[] = [
         {
             field: 'title',
             headerName: 'Articles',
-
             flex: 1,
             sortable: false,
             renderCell: (params) => {
@@ -28,6 +54,13 @@ export const ArticleGrid: React.FC<ArticleGridProps> = ({ pagedData, isLoading }
             },
         },
     ];
+
+    const handlePaginationModelChange = (model: GridPaginationModel) => {
+        onQueryChange({
+            pageNumber: model.page + 1, // Convert 0-indexed to 1-indexed
+            pageSize: model.pageSize,
+        });
+    };
 
     return (
         <Paper
@@ -39,11 +72,10 @@ export const ArticleGrid: React.FC<ArticleGridProps> = ({ pagedData, isLoading }
                 borderRadius: '8px',
                 border: '1px solid',
                 borderColor: 'divider',
-                // overflow: 'hidden',
             }}
         >
             <DataGrid
-                rows={pagedData.data}
+                rows={articles}
                 columns={columns}
                 columnHeaderHeight={0}
                 getRowId={(row) => row.articleId}
@@ -52,7 +84,19 @@ export const ArticleGrid: React.FC<ArticleGridProps> = ({ pagedData, isLoading }
                 getRowHeight={() => 'auto'}
                 disableColumnMenu
                 disableRowSelectionOnClick
-                hideFooter
+                // Server-side Logic
+                paginationMode="server"
+                rowCount={totalCount}
+                // State Mapping
+                paginationModel={{
+                    page: query.pageNumber - 1, // Convert 1-indexed to 0-indexed for MUI
+                    pageSize: query.pageSize,
+                }}
+                onPaginationModelChange={handlePaginationModelChange}
+                // Custom Pagination
+                slots={{
+                    pagination: CustomPagination,
+                }}
                 sx={{
                     border: 'none',
                     // Header styling
