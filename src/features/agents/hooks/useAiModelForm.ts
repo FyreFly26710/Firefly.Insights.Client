@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { aiModelsApi } from '../api/aiModelsApi';
 import type { AiModelCreateRequest } from '../api-types';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 
 interface UseAiModelFormProps {
     aiModelId?: number | null;

@@ -5,7 +5,7 @@ import type { GridColDef, GridRowParams } from "@mui/x-data-grid";
 import { PageHeader } from "@/components/Header/PageHeader";
 import { aiProvidersApi } from "../api/aiProvidersApi";
 import type { AiProviderDto } from "../api-types/aiProviders";
-import { useAsync } from "@/features/shared/hooks/useAsync ";
+import { useAsync } from "@/features/shared/hooks/useAsync";
 import { AiProviderApiKeyDrawer } from "../components/AiProviderApiKeyDrawer";
 
 export const ApiKeys = () => {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { categoriesApi } from '@/features/articles/api/categoriesApi';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 
 export const useCategoriesTable = () => {
     const { data: categories, isLoading, execute } = useAsync(categoriesApi.getList);

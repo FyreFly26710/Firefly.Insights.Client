@@ -5,7 +5,7 @@ import {
     categoriesApi,
 } from '@/features/articles/api';
 import type { TopicCreateRequest, TopicUpdateRequest } from '@/features/articles/api-types';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 
 interface UseTopicFormProps {
     topicId?: number | null;

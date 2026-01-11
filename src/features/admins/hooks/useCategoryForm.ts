@@ -5,7 +5,7 @@ import {
     topicsApi,
 } from '@/features/articles/api';
 import type { CategoryCreateRequest, CategoryUpdateRequest } from '@/features/articles/api-types';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 
 interface UseCategoryFormProps {
     categoryId?: number | null;

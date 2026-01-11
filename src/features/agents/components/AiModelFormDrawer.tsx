@@ -5,7 +5,7 @@ import { useAiModelForm } from '../hooks/useAiModelForm';
 import { UpsertDrawer } from '@/components/Drawers/UpsertDrawer';
 import Flex from '@/components/Elements/Flex/Flex';
 import { LookupFormSelect } from '@/components/Selects/LookupFormSelect';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 import { aiProvidersApi } from '../api';
 
 interface AiModelFormDrawerProps {

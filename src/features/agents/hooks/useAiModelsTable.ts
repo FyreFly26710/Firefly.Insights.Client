@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { aiModelsApi } from '../api/aiModelsApi';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 
 export const useAiModelsTable = () => {
     const { data: models, error, isLoading, execute } = useAsync(aiModelsApi.getList);

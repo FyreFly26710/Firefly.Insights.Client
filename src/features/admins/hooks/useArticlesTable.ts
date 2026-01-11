@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { articlesApi } from '@/features/articles/api/articlesApi';
 import type { ArticleListRequest } from '@/features/articles/api-types';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 
 export const useArticlesTable = () => {
     const [query, setQuery] = useState<ArticleListRequest>({

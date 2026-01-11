@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 import { articlesApi } from '../api/articlesApi';
 import { useEffect } from 'react';
 import { ErrorPageLayout } from '@/layouts/ErrorPageLayout';

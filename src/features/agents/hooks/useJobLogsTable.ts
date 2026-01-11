@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { jobLogsApi } from '../api/jobLogsApi';
 import type { JobLogListRequest } from '../api-types';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 
 export const useJobLogsTable = () => {
     const [query, setQuery] = useState<JobLogListRequest>({

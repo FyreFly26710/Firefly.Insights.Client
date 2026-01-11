@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { executionLogsApi } from '../api/executionLogsApi';
 import type { ExecutionLogListRequest, ExecutionLogDto } from '../api-types';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 
 export const useExecutionLogsTable = () => {
     const [query, setQuery] = useState<ExecutionLogListRequest>({

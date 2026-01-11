@@ -1,6 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 import { aiModelsApi } from '../api/aiModelsApi';
 import { categoriesApi } from '@/features/articles/api/';
 import type { GenerateArticleSummaryRequest, AiModelDto } from '../api-types';

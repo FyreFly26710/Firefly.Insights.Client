@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import Flex from '@/components/Elements/Flex/Flex';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 import { topicsApi } from '@/features/articles/api/topicsApi';
 import { TopicSidebar } from '@/features/articles/components/TopicSidebar';
 import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';

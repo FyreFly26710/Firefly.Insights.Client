@@ -2,7 +2,7 @@ import { PageSpinner } from '@/components/Elements/Spinner/PageSpinner';
 import { useEffect } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { topicsApi } from '../api/topicsApi';
-import { useAsync } from '@/features/shared/hooks/useAsync ';
+import { useAsync } from '@/features/shared/hooks/useAsync';
 import { ErrorPageLayout } from '@/layouts/ErrorPageLayout';
 
 export const TopicPage = () => {
