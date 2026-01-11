@@ -8,34 +8,50 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-    const [isLoading, setIsLoading] = useState(true);
+    // const [isLoading, setIsLoading] = useState(true);
+
     const token = useUserStore((state) => state.token);
     const user = useUserStore((state) => state.user);
     const setAuth = useUserStore((state) => state.setAuth);
+    const setToken = useUserStore((state) => state.setToken);
     const logout = useUserStore((state) => state.logout);
 
     useEffect(() => {
+        const handleMessage = (event: MessageEvent) => {
+            // if (event.origin !== window.location.origin) return;
+
+            if (event.data?.type === 'GOOGLE_AUTH_SUCCESS') {
+                const jwtToken = event.data.token;
+                if (!jwtToken) return;
+
+                setToken(jwtToken);
+            }
+        };
+
+        window.addEventListener('message', handleMessage);
+        return () => window.removeEventListener('message', handleMessage);
+    }, [setToken]);
+
+    useEffect(() => {
         const initializeAuth = async () => {
-            // If we have a token but no user, fetch the user
             if (token && !user) {
                 try {
                     const userData = await authApi.getLoginUser();
                     setAuth(userData, token);
                 } catch (error) {
-                    // If fetching user fails, remove the token
                     console.error('Failed to fetch user:', error);
                     logout();
                 }
             }
-            setIsLoading(false);
+            // setIsLoading(false);
         };
 
         initializeAuth();
     }, [token, user, setAuth, logout]);
 
-    if (isLoading) {
-        return <PageSpinner />;
-    }
+    // if (isLoading) {
+    //     return <PageSpinner />;
+    // }
 
     return <>{children}</>;
 };

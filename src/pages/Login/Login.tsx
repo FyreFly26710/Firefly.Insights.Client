@@ -1,10 +1,18 @@
-import GmailLoginBtn from "@/features/auth/components/GmailLoginBtn";
-import { LoginForm } from "@/features/auth/components/LoginForm";
-import { useRedirectAfterLogin } from "@/features/auth/hooks/useRedirectAfterLogin";
-import { Box, Divider, Paper, Typography, Container } from "@mui/material";
+import GmailLoginBtn from '@/features/auth/components/GmailLoginBtn';
+import { LoginForm } from '@/features/auth/components/LoginForm';
+import { useRedirectAfterLogin } from '@/features/auth/hooks/useRedirectAfterLogin';
+import { Box, Divider, Paper, Typography, Container } from '@mui/material';
+import { useUserStore } from '@/stores/useUserStore';
+import { useEffect } from 'react';
 
 export const Login = () => {
     const redirectAfterLogin = useRedirectAfterLogin();
+    const user = useUserStore((state) => state.user);
+    useEffect(() => {
+        if (user) {
+            redirectAfterLogin();
+        }
+    }, [user, redirectAfterLogin]);
 
     return (
         <Box
@@ -18,7 +26,7 @@ export const Login = () => {
                 bgcolor: 'background.default',
                 color: 'text.primary',
                 px: 2,
-                transition: 'background-color 0.3s ease'
+                transition: 'background-color 0.3s ease',
             }}
         >
             <Container maxWidth="xs">
@@ -29,7 +37,7 @@ export const Login = () => {
                         borderRadius: 4,
                         textAlign: 'center',
                         bgcolor: 'background.paper',
-                        backgroundImage: 'none'
+                        backgroundImage: 'none',
                     }}
                 >
                     <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700 }}>
@@ -41,9 +49,7 @@ export const Login = () => {
 
                     <GmailLoginBtn />
 
-                    <Divider sx={{ my: 3, typography: 'caption', color: 'text.disabled' }}>
-                        OR
-                    </Divider>
+                    <Divider sx={{ my: 3, typography: 'caption', color: 'text.disabled' }}>OR</Divider>
 
                     <LoginForm onSuccess={redirectAfterLogin} />
 
@@ -57,7 +63,7 @@ export const Login = () => {
                                     cursor: 'pointer',
                                     ml: 0.5,
                                     fontWeight: 600,
-                                    '&:hover': { textDecoration: 'underline' }
+                                    '&:hover': { textDecoration: 'underline' },
                                 }}
                             >
                                 Sign up for free

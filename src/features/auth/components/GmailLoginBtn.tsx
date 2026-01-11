@@ -39,26 +39,6 @@ const StyledButton = styled(Button)(({ theme }) => {
 });
 
 const GoogleLoginButton = () => {
-    const setToken = useUserStore((state) => state.setToken);
-
-    useEffect(() => {
-        // Define the listener inside useEffect so we can remove it on unmount
-        const handleMessage = (event: MessageEvent) => {
-            // Check origin for security
-            if (event.origin !== API_URL) return;
-
-            if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-                const jwtToken = event.data.token;
-                setToken(jwtToken);
-
-                // Redirect to home - AuthProvider will fetch user automatically
-                window.location.href = '/';
-            }
-        };
-
-        window.addEventListener('message', handleMessage);
-        return () => window.removeEventListener('message', handleMessage);
-    }, [setToken]);
 
     const handleGoogleLogin = () => {
         const redirectUri = encodeURIComponent(`${API_URL}/api/identity/auth/signin-google`);
